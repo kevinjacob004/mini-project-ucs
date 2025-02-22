@@ -65,7 +65,7 @@
     // Fetch and display posts (threads)
     async function fetchPosts() {
       try {
-        const response = await fetch("https://unified-campus-system.onrender.com/api/community/threads");
+        const response = await fetch("http://localhost:5000/api/community/threads");
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -109,7 +109,7 @@
     // Fetch and display comments for a thread
     async function fetchComments(thread_id) {
       try {
-        const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}/comments`);
+        const response = await fetch(`http://localhost:5000/api/community/threads/${thread_id}/comments`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -159,7 +159,7 @@
           return;
         }
 
-        const response = await fetch("https://unified-campus-system.onrender.com/api/community/threads", {
+        const response = await fetch("http://localhost:5000/api/community/threads", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -201,7 +201,7 @@
             return;
           }
 
-          const response = await fetch("https://unified-campus-system.onrender.com/api/community/messages", {
+          const response = await fetch("http://localhost:5000/api/community/messages", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
