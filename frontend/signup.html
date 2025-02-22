@@ -1,0 +1,232 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="auth-body">
+    <div id="Auth">
+      <div id="login-container">
+        <div id="login-box">
+          <div class="login-box">
+            <h2>Sign Up</h2>
+            <div id="input-group">
+              <div class="input-group">
+                <div class="input-group">
+                  <label for="username">First Name</label>
+                  <input
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    required
+                    placeholder="Enter your first name"
+                  />
+
+                  <div class="input-group">
+                    <label for="username">Last Name</label>
+                    <input
+                      type="text"
+                      id="lastname"
+                      name="lastname"
+                      required
+                      placeholder="Enter your last name"
+                    />
+
+                    <div class="input-group">
+                      <label for="username">Email</label>
+                      <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="Enter your email"
+                      />
+                      
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  required
+                  placeholder="Enter your username"
+                />
+              </div>
+              <div class="input-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  placeholder="Enter your password"
+                />
+              </div>
+              <div class="input-group">
+                <label for="password">Confirm Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  placeholder="Enter your password"
+                />
+              </div>
+            </div>
+            <button type="submit">Sign Up</button>
+            <div id="extra-options">
+              <div class="extra-options">
+                <a href="auth.html">Go to Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="auth-body">
+    <div id="Auth">
+      <div id="login-container">
+        <div id="login-box">
+          <div class="login-box">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+              <div id="input-group">
+                <div class="input-group">
+                  <label for="firstname">First Name</label>
+                  <input
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    required
+                    placeholder="Enter your first name"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="lastname">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    required
+                    placeholder="Enter your last name"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    placeholder="Enter your username"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="confirm-password">Confirm Password</label>
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirm-password"
+                    required
+                    placeholder="Confirm your password"
+                  />
+                </div>
+              </div>
+              <button type="submit">Sign Up</button>
+            </form>
+            <div id="extra-options">
+              <div class="extra-options">
+                <a href="auth.html">Go to Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript to handle form submission
+      document.getElementById("signup-form").addEventListener("submit", async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get form data
+        const formData = {
+          first_name: document.getElementById("firstname").value,
+          last_name: document.getElementById("lastname").value,
+          email: document.getElementById("email").value,
+          username: document.getElementById("username").value,
+          password: document.getElementById("password").value,
+        };
+
+        // Check if passwords match
+        const confirmPassword = document.getElementById("confirm-password").value;
+        if (formData.password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        try {
+          // Send POST request to the backend
+          const response = await fetch("http://localhost:5000/api/auth/register",{
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("Registration successful!");
+            window.location.href = "auth.html"; // Redirect to login page
+          } else {
+            alert(data.message || "Registration failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred during registration");
+        }
+      });
+    </script>
+  </body>
+</html>

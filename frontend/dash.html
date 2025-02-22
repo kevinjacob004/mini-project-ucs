@@ -1,0 +1,151 @@
+<!--<html>
+  <body id="home">
+    <div id="dash">
+      <h1>Hello User!</h1>
+
+     <img src="temp.webp" alt="temp-img"/> 
+    </div>
+    <div>
+      <p>page contents here-----</p>
+    </div>
+  </body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="dashboard-body">
+    <header>
+      <div class="logo">
+        <img src="logo.png" alt="College Logo" />
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#profile">Profile</a></li>
+          <li><a href="#facilities">Facilities</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="auth.html" class="logout-btn">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="sidebar">
+      <aside class="sidebar">
+        <h2>Campus System</h2>
+        <ul>
+          <li>
+            <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+          </li>
+          <li>
+            <a href="dash.html"><i class="fas fa-home"></i> Dashboard</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-utensils"></i> Canteen</a>
+          </li>
+          <li>
+            <a href="#"><i class="fas fa-user-md"></i> Counseling</a>
+          </li>
+          <li>
+            <a href="community.html"><i class="fas fa-users"></i> Community</a>
+          </li>
+          <li>
+            <a href="index.html" class="logout"
+              ><i class="fas fa-sign-out-alt"></i> Logout</a
+            >
+          </li>
+        </ul>
+      </aside>
+    </div>
+
+    <!--<div class="sidebar">
+      <ul>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <br />
+        <li><a href="#labs"></a></li>
+        <li><a href="#labs">Canteen</a></li>
+        <li><a href="#labs">Counselling</a></li>
+        <li><a href="#sports">Community</a></li>
+        <li><a href="#canteen">Canteen</a></li>
+        <li><a href="#hostel">Hostel</a></li>
+      </ul>
+    </div>-->
+
+    <div class="main-content">
+      <section id="home">
+        <div class="dashboard-container">
+          <h1>Welcome to the College Dashboard</h1>
+          <p>Your one-stop hub for accessing all college facilities.</p>
+
+          <div class="stats">
+            <div class="stat-card">
+              <h3>Canteen</h3>
+              <p>Access and explore Canteen facilites</p>
+              <a href="#library">Explore</a>
+            </div>
+            <div class="stat-card">
+              <h3>Counselling</h3>
+              <p>Access and explore Counselling facilites</p>
+              <a href="#labs">Explore</a>
+            </div>
+            <div class="stat-card">
+              <h3>Community</h3>
+              <p>Access and explore Community facilites</p>
+              <a href="community.html">Explore</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile">
+        <div class="profile-container">
+          <div class="profile-card">
+            <img src="profile-picture.jpg" alt="Profile Picture" />
+            <div class="profile-info">
+              <h3>Username</h3>
+              <p>Student, Computer Science</p>
+              <a href="#edit-profile">Edit Profile</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="facilities">
+        <div class="facility-container">
+          <div class="facility-card">
+            <h3>Canteen</h3>
+            <p>Access and explore Canteen facilites</p>
+            <a href="#library">More Info</a>
+          </div>
+          <div class="facility-card">
+            <h3>Counselling</h3>
+            <p>Access and explore Counselling facilites</p>
+            <a href="#labs">More Info</a>
+          </div>
+          <div class="facility-card">
+            <h3>Community</h3>
+            <p>Access and explore Community facilites</p>
+            <a href="#sports">More Info</a>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>&copy;Copyright 2025 College Name. All rights reserved.</p>
+        <div class="social-icons">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Twitter</a>
+          <a href="#" target="_blank">Instagram</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

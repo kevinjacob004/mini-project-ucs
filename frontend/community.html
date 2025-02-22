@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community - Unified Campus System</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Use Google Fonts as a fallback -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+
+<body background="giphy1.gif">
+  <div class="community-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Campus System</h2>
+      <ul>
+        <li>
+          <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li>
+          <a href="dash.html"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-utensils"></i> Canteen</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-user-md"></i> Counseling</a>
+        </li>
+        <li>
+          <a href="community.html" class="active"><i class="fas fa-users"></i> Community</a>
+        </li>
+        <li>
+          <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="community-content">
+      <header>
+        <h1>Community Space</h1>
+        <button class="profile-btn">
+          <i class="fas fa-user-circle"></i> Profile
+        </button>
+      </header>
+
+      <!-- Post Input Box -->
+      <section class="post-box">
+        <input type="text" id="post-title" placeholder="Enter a title for your post..." />
+        <textarea id="post-content" placeholder="Share something with the community..."></textarea>
+        <button class="post-btn">Post</button>
+      </section>
+
+      <!-- Post Feed -->
+      <section class="post-feed" id="post-feed">
+        <!-- Posts will be dynamically inserted here -->
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Fetch and display posts (threads)
+    async function fetchPosts() {
+      try {
+        const response = await fetch("http://localhost:5000/api/community/threads");
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const threads = await response.json();
+        console.log("Fetched threads:", threads); // Debugging
+
+        const postFeed = document.getElementById("post-feed");
+        postFeed.innerHTML = ""; // Clear existing posts
+
+        threads.forEach((thread) => {
+          const postElement = document.createElement("div");
+          postElement.classList.add("post");
+
+          postElement.innerHTML = `
+              <h3>${thread.User.first_name} ${thread.User.last_name} <span class="timestamp">${new Date(thread.created_at).toLocaleString()}</span></h3>
+              <h4>${thread.title}</h4>
+              <p>${thread.content}</p>
+              <button class="view-comments-btn" data-thread-id="${thread.thread_id}">View Comments</button>
+              <div class="comment-section">
+                <input type="text" placeholder="Write a comment..." />
+                <button class="comment-btn" data-thread-id="${thread.thread_id}">Comment</button>
+              </div>
+              <div class="comments-container" id="comments-${thread.thread_id}" style="display: none;">
+                <!-- Comments will be dynamically inserted here -->
+              </div>
+            `;
+
+          postFeed.appendChild(postElement);
+
+          // Add the .show class after a short delay to trigger the animation
+          setTimeout(() => {
+            postElement.classList.add("show");
+          }, 10);
+        });
+      } catch (error) {
+        console.error("Error fetching threads:", error);
+        alert("Failed to fetch posts. Please try again later.");
+      }
+    }
+
+    // Fetch and display comments for a thread
+    async function fetchComments(thread_id) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/community/threads/${thread_id}/comments`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const comments = await response.json();
+        console.log("Fetched comments:", comments); // Debugging
+
+        const commentsContainer = document.getElementById(`comments-${thread_id}`);
+        commentsContainer.innerHTML = ""; // Clear existing comments
+
+        comments.forEach((comment) => {
+          const commentElement = document.createElement("div");
+          commentElement.classList.add("comment");
+
+          commentElement.innerHTML = `
+              <p><strong>${comment.User.first_name} ${comment.User.last_name}</strong>: ${comment.message_content}</p>
+              <span class="timestamp">${new Date(comment.created_at).toLocaleString()}</span>
+            `;
+
+          commentsContainer.appendChild(commentElement);
+        });
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+        alert("Failed to fetch comments. Please try again later.");
+      }
+    }
+
+    // Fetch posts when the page loads
+    document.addEventListener("DOMContentLoaded", fetchPosts);
+
+    // Handle post (thread) creation
+    document.querySelector(".post-btn").addEventListener("click", async () => {
+      const title = document.getElementById("post-title").value;
+      const content = document.getElementById("post-content").value;
+
+      if (!title || !content) {
+        alert("Please enter a title and content to post.");
+        return;
+      }
+
+      try {
+        const token = sessionStorage.getItem("token");
+        console.log("Token being sent:", token);
+
+        if (!token) {
+          alert("You are not logged in. Redirecting to login page...");
+          window.location.href = "auth.html";
+          return;
+        }
+
+        const response = await fetch("http://localhost:5000/api/community/threads", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ title, content }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error || "Failed to create post");
+        }
+
+        alert("Post created successfully!");
+        fetchPosts(); // Refresh the post feed
+      } catch (error) {
+        console.error("Error creating post:", error);
+        alert(error.message || "An error occurred while creating the post");
+      }
+    });
+
+    // Handle comment (message) creation
+    document.getElementById("post-feed").addEventListener("click", async (e) => {
+      if (e.target.classList.contains("comment-btn")) {
+        const thread_id = e.target.getAttribute("data-thread-id");
+        const commentInput = e.target.previousElementSibling;
+        const message_content = commentInput.value;
+
+        if (!message_content) {
+          alert("Please enter a comment.");
+          return;
+        }
+
+        try {
+          const token = sessionStorage.getItem("token");
+          if (!token) {
+            alert("You are not logged in. Redirecting to login page...");
+            window.location.href = "auth.html";
+            return;
+          }
+
+          const response = await fetch("http://localhost:5000/api/community/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ thread_id, message_content }),
+          });
+
+          if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || "Failed to add comment");
+          }
+
+          alert("Comment added successfully!");
+          fetchComments(thread_id); // Refresh the comments
+        } catch (error) {
+          console.error("Error adding comment:", error);
+          alert(error.message || "An error occurred while adding the comment");
+        }
+      }
+    });
+
+    // Add click event to "View Comments" button
+    document.getElementById("post-feed").addEventListener("click", async (e) => {
+      if (e.target.classList.contains("view-comments-btn")) {
+        const thread_id = e.target.getAttribute("data-thread-id");
+        const commentsContainer = document.getElementById(`comments-${thread_id}`);
+
+        // Toggle visibility
+        if (commentsContainer.style.display === "none") {
+          commentsContainer.style.display = "block";
+          await fetchComments(thread_id); // Fetch comments if not already fetched
+        } else {
+          commentsContainer.style.display = "none";
+        }
+      }
+    });
+
+    // Handle logout
+    document.querySelector(".logout").addEventListener("click", () => {
+      // Clear sessionStorage
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("fname");
+      sessionStorage.removeItem("lname");
+      sessionStorage.removeItem("id");
+
+      // Redirect to the login page
+      window.location.href = "auth.html";
+    });
+  </script>
+</body>
+
+</html>

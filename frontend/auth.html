@@ -1,0 +1,156 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="auth-body">
+    <div id="Auth">
+      <div id="login-container">
+        <div id="login-box">
+          <div class="login-box">
+            <h2>Login</h2>
+            <div id="input-group">
+              <div class="input-group">
+                <label for="username">Username</label>
+                <form action="">
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    placeholder="Enter your username"
+                  />
+                </form>
+              </div>
+              <div class="input-group">
+                <label for="password">Password</label>
+                <form>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                  />
+                </form>
+              </div>
+            </div>
+            <a href="homepage.html" id="redirectLink">
+              <button type="submit">Login</button>
+            </a>
+
+            <div id="extra-options">
+              <div class="extra-options">
+                <a href="#">Forgot Password?</a> |
+                <a href="signup.html">Create an Account</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="auth-body">
+    <div id="Auth">
+      <div id="login-container">
+        <div id="login-box">
+          <div class="login-box">
+            <h2>Login</h2>
+            <form id="login-form">
+              <div id="input-group">
+                <div class="input-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    required
+                    placeholder="Enter your username"
+                  />
+                </div>
+                <div class="input-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                  />
+                </div>
+              </div>
+              <button type="submit">Login</button>
+            </form>
+
+            <div id="extra-options">
+              <div class="extra-options">
+                <a href="#">Forgot Password?</a> |
+                <a href="signup.html">Create an Account</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Handle form submission
+      document.getElementById("login-form").addEventListener("submit", async (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get form data
+        const formData = {
+          username: document.getElementById("username").value,
+          password: document.getElementById("password").value,
+        };
+
+        try {
+          // Send POST request to the backend
+          const response = await fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("Login successful!");
+            // Save user information in sessionStorage
+            // Save user information and token in sessionStorage
+            sessionStorage.setItem("token", data.token); // Store the JWT token
+            sessionStorage.setItem("username", data.username); // Assuming the backend sends the username
+            sessionStorage.setItem("fname", data.first_name); // Assuming the backend sends the user's name
+            sessionStorage.setItem("lname", data.last_name); // Assuming the backend sends the user's name
+            sessionStorage.setItem("id", data.id); // Assuming the backend sends the user's name
+
+            window.location.href = "homepage.html"; // Redirect to homepage
+          } else {
+            // Display the error message from the backend
+            alert(data.error || "Login failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred during login");
+        }
+      });
+    </script>
+  </body>
+</html>
