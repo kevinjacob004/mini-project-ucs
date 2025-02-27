@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Unified Campus System</title>
+  <title>Home - Unified Campus System</title>
   <style>
     body {
       background-image: url("giphy.gif");
@@ -17,8 +16,9 @@
   </style>
   <link rel="stylesheet" href="style.css" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </head>
-
 <body>
   <div class="dashboard-container">
     <!-- Sidebar -->
@@ -35,7 +35,7 @@
           <a href="#"><i class="fas fa-utensils"></i> Canteen</a>
         </li>
         <li>
-          <a href="#"><i class="fas fa-user-md"></i> Counseling</a>
+          <a href="counselling.html"><i class="fas fa-user-md"></i> Counseling</a>
         </li>
         <li>
           <a href="community.html"><i class="fas fa-users"></i> Community</a>
@@ -60,8 +60,8 @@
       <!-- Dashboard Overview -->
       <section class="dashboard-overview">
         <div class="card">
-          <h3>Total Students</h3>
-          <p>1,500</p>
+          <h3>Total Users</h3>
+          <p id="total-students"></p>
         </div>
         <div class="card">
           <h3>Active Orders</h3>
@@ -83,13 +83,40 @@
         <div class="actions">
           <button>Order Food</button>
           <button>Book Counseling</button>
-          <button>Join Community</button>
+          <a href="community.html"><button>Community</button></a>
         </div>
       </section>
     </main>
   </div>
 
   <script>
+    // Function to fetch total students from the backend
+    async function fetchTotalStudents() {
+      try {
+        const response = await fetch('https://unified-campus-system.onrender.com/api/homepage/total-students'); // Call the API endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch total students');
+        }
+        const data = await response.json(); // Parse the JSON response
+        return data.total_students; // Return the total number of students
+      } catch (error) {
+        console.error('Error fetching total students:', error);
+        return 0; // Return 0 if there's an error
+      }
+    }
+
+    // Function to update the total students card
+    async function updateTotalStudents() {
+      const totalStudents = await fetchTotalStudents(); // Fetch total students
+      const totalStudentsElement = document.getElementById('total-students'); // Select the <p> element
+      if (totalStudentsElement) {
+        totalStudentsElement.textContent = totalStudents; // Update the content
+      }
+    }
+
+    // Call the function to update the total students when the page loads
+    document.addEventListener('DOMContentLoaded', updateTotalStudents);
+
     // Retrieve the logged-in user's name from sessionStorage
     const username = sessionStorage.getItem("username");
     const fname = sessionStorage.getItem("fname");
@@ -116,5 +143,4 @@
     }
   </script>
 </body>
-
 </html>

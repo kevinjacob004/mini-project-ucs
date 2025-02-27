@@ -5,13 +5,139 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Community - Unified Campus System</title>
+  <style>
+    body {
+      background-image: url("giphy1.gif");
+      background-size: cover;
+      background-repeat: repeat;
+      background-position: center center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* 🔹 Post Styling */
+    .post {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .post:hover {
+      transform: translateY(-3px);
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .user-info i {
+      font-size: 20px;
+      margin-right: 5px;
+      color: #007bff;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: gray;
+    }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .post-content {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .post-actions button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .post-actions .delete-post-btn {
+      background: #dc3545;
+    }
+
+    /* 🔹 Comment Styling */
+    .comment {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 10px;
+      border-left: 4px solid #007bff;
+      transition: background 0.2s ease-in-out;
+    }
+
+    .comment:hover {
+      background: #eef2ff;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .comment-content {
+      font-size: 14px;
+      color: #444;
+      margin: 5px 0;
+    }
+
+    .comment-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 5px;
+    }
+
+    .comment-actions .delete-comment-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  </style>
   <link rel="stylesheet" href="style.css" />
   <!-- Use Google Fonts as a fallback -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </head>
 
-<body background="giphy1.gif">
+<body>
   <div class="community-container">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -21,13 +147,13 @@
           <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
         </li>
         <li>
-          <a href="dash.html"><i class="fas fa-home"></i> Dashboard</a>
+          <a href="dash.html"><i class="fas fa-th-lists"></i> Dashboard</a>
         </li>
         <li>
           <a href="#"><i class="fas fa-utensils"></i> Canteen</a>
         </li>
         <li>
-          <a href="#"><i class="fas fa-user-md"></i> Counseling</a>
+          <a href="counselling.html"><i class="fas fa-user-md"></i> Counseling</a>
         </li>
         <li>
           <a href="community.html" class="active"><i class="fas fa-users"></i> Community</a>
@@ -63,6 +189,93 @@
 
   <script>
     // Fetch and display posts (threads)
+    // async function fetchPosts() {
+    //   try {
+    //     const response = await fetch("https://unified-campus-system.onrender.com/api/community/threads");
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! Status: ${response.status}`);
+    //     }
+    //     const threads = await response.json();
+    //     console.log("Fetched threads:", threads); // Debugging
+
+    //     const postFeed = document.getElementById("post-feed");
+    //     postFeed.innerHTML = ""; // Clear existing posts
+
+    //     threads.forEach((thread) => {
+    //       const postElement = document.createElement("div");
+    //       postElement.classList.add("post");
+
+    //       postElement.innerHTML = `
+    //           <h3>${thread.User.first_name} ${thread.User.last_name} <span class="timestamp">${new Date(thread.created_at).toLocaleString()}</span></h3>
+    //           <h4>${thread.title}</h4>
+    //           <p>${thread.content}</p>
+    //           <button class="view-comments-btn" data-thread-id="${thread.thread_id}">View Comments</button>
+    //           <div class="comment-section">
+    //             <input type="text" placeholder="Write a comment..." />
+    //             <button class="comment-btn" data-thread-id="${thread.thread_id}">Comment</button>
+    //           </div>
+    //           <div class="comments-container" id="comments-${thread.thread_id}" style="display: none;">
+    //             <!-- Comments will be dynamically inserted here -->
+    //           </div>
+    //         `;
+
+    //       postFeed.appendChild(postElement);
+
+    //       // Add the .show class after a short delay to trigger the animation
+    //       setTimeout(() => {
+    //         postElement.classList.add("show");
+    //       }, 10);
+    //     });
+    //   } catch (error) {
+    //     console.error("Error fetching threads:", error);
+    //     alert("Failed to fetch posts. Please try again later.");
+    //   }
+    // }
+
+
+    // async function fetchPosts() {
+    //   try {
+    //     const response = await fetch("https://unified-campus-system.onrender.com/api/community/threads");
+    //     if (!response.ok) {
+    //       throw new Error("Failed to fetch threads");
+    //     }
+
+    //     const threads = await response.json();
+    //     const postFeed = document.getElementById("post-feed");
+    //     postFeed.innerHTML = "";
+
+    //     threads.forEach((thread) => {
+    //       const postElement = document.createElement("div");
+    //       postElement.classList.add("post");
+
+    //       // 🔹 Create delete button (only for post owners)
+    //       const deleteButton = thread.user_id === parseInt(sessionStorage.getItem("id"))
+    //         ? `<button class="delete-post-btn" data-thread-id="${thread.thread_id}">🗑 Delete Post</button>`
+    //         : "";
+
+    //       postElement.innerHTML = `
+    //             <h3>${thread.User.first_name} ${thread.User.last_name} 
+    //                 <span class="timestamp">${new Date(thread.created_at).toLocaleString()}</span>
+    //             </h3>
+    //             <h4>${thread.title}</h4>
+    //             <p>${thread.content}</p>
+    //             ${deleteButton}
+    //             <button class="view-comments-btn" data-thread-id="${thread.thread_id}">View Comments</button>
+    //             <div class="comments-container" id="comments-${thread.thread_id}" style="display: none;"></div>
+    //         `;
+
+    //       postFeed.appendChild(postElement);
+    //       // Add the .show class after a short delay to trigger the animation
+    //       setTimeout(() => {
+    //         postElement.classList.add("show");
+    //       }, 10);
+    //     });
+
+    //   } catch (error) {
+    //     console.error("Error fetching threads:", error);
+    //   }
+    // }
+
     async function fetchPosts() {
       try {
         const response = await fetch("https://unified-campus-system.onrender.com/api/community/threads");
@@ -79,62 +292,162 @@
           const postElement = document.createElement("div");
           postElement.classList.add("post");
 
+          // 🔹 Create delete button (only for post owners)
+          const deleteButton = thread.user_id === parseInt(sessionStorage.getItem("id"))
+            ? `<button class="delete-post-btn" data-thread-id="${thread.thread_id}">🗑 Delete Post</button>`
+            : "";
+
           postElement.innerHTML = `
-              <h3>${thread.User.first_name} ${thread.User.last_name} <span class="timestamp">${new Date(thread.created_at).toLocaleString()}</span></h3>
-              <h4>${thread.title}</h4>
-              <p>${thread.content}</p>
-              <button class="view-comments-btn" data-thread-id="${thread.thread_id}">View Comments</button>
-              <div class="comment-section">
-                <input type="text" placeholder="Write a comment..." />
-                <button class="comment-btn" data-thread-id="${thread.thread_id}">Comment</button>
-              </div>
-              <div class="comments-container" id="comments-${thread.thread_id}" style="display: none;">
-                <!-- Comments will be dynamically inserted here -->
-              </div>
+                <h3>${thread.User.first_name} ${thread.User.last_name} 
+                    <span class="timestamp">${new Date(thread.created_at).toLocaleString()}</span>
+                </h3>
+                <h4>${thread.title}</h4>
+                <p>${thread.content}</p>
+                ${deleteButton}
+                <button class="view-comments-btn" data-thread-id="${thread.thread_id}">💬 View Comments</button>
+                <div class="comment-section">
+                    <input type="text" class="comment-input" placeholder="Write a comment..." />
+                    <button class="comment-btn" data-thread-id="${thread.thread_id}">➕ Add Comment</button>
+                </div>
+                <div class="comments-container" id="comments-${thread.thread_id}" style="display: none;">
+                    <!-- Comments will be dynamically inserted here -->
+                </div>
             `;
 
           postFeed.appendChild(postElement);
 
-          // Add the .show class after a short delay to trigger the animation
+          // Add animation for better UI
           setTimeout(() => {
             postElement.classList.add("show");
           }, 10);
         });
+
       } catch (error) {
         console.error("Error fetching threads:", error);
         alert("Failed to fetch posts. Please try again later.");
       }
     }
 
+
     // Fetch and display comments for a thread
+    // async function fetchComments(thread_id) {
+    //   try {
+    //     const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}/comments`);
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! Status: ${response.status}`);
+    //     }
+    //     const comments = await response.json();
+    //     console.log("Fetched comments:", comments); // Debugging
+
+    //     const commentsContainer = document.getElementById(`comments-${thread_id}`);
+    //     commentsContainer.innerHTML = ""; // Clear existing comments
+
+    //     comments.forEach((comment) => {
+    //       const commentElement = document.createElement("div");
+    //       commentElement.classList.add("comment");
+
+    //       commentElement.innerHTML = `
+    //           <p><strong>${comment.User.first_name} ${comment.User.last_name}</strong>: ${comment.message_content}</p>
+    //           <span class="timestamp">${new Date(comment.created_at).toLocaleString()}</span>
+    //         `;
+
+    //       commentsContainer.appendChild(commentElement);
+    //     });
+    //   } catch (error) {
+    //     console.error("Error fetching comments:", error);
+    //     alert("Failed to fetch comments. Please try again later.");
+    //   }
+    // }
+
+
     async function fetchComments(thread_id) {
       try {
         const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}/comments`);
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error("Failed to fetch comments");
         }
-        const comments = await response.json();
-        console.log("Fetched comments:", comments); // Debugging
 
+        const comments = await response.json();
         const commentsContainer = document.getElementById(`comments-${thread_id}`);
-        commentsContainer.innerHTML = ""; // Clear existing comments
+        commentsContainer.innerHTML = "";
 
         comments.forEach((comment) => {
+          const deleteCommentButton = comment.user_id === parseInt(sessionStorage.getItem("id"))
+            ? `<button class="delete-comment-btn" data-comment-id="${comment.message_id}">🗑 Delete</button>`
+            : "";
+
           const commentElement = document.createElement("div");
           commentElement.classList.add("comment");
 
           commentElement.innerHTML = `
-              <p><strong>${comment.User.first_name} ${comment.User.last_name}</strong>: ${comment.message_content}</p>
-              <span class="timestamp">${new Date(comment.created_at).toLocaleString()}</span>
+                <p><strong>${comment.User.first_name} ${comment.User.last_name}</strong>: ${comment.message_content}</p>
+                <span class="timestamp">${new Date(comment.created_at).toLocaleString()}</span>
+                ${deleteCommentButton}
             `;
 
           commentsContainer.appendChild(commentElement);
         });
+
       } catch (error) {
         console.error("Error fetching comments:", error);
-        alert("Failed to fetch comments. Please try again later.");
       }
     }
+
+
+
+    document.getElementById("post-feed").addEventListener("click", async (e) => {
+      if (e.target.classList.contains("delete-post-btn")) {
+        const thread_id = e.target.getAttribute("data-thread-id");
+        await deletePost(thread_id);
+      }
+
+      if (e.target.classList.contains("delete-comment-btn")) {
+        const message_id = e.target.getAttribute("data-comment-id");
+        await deleteComment(message_id);
+      }
+    });
+
+    // 🔹 Delete Post
+    async function deletePost(thread_id) {
+      if (!confirm("Are you sure you want to delete this post? This will also delete all comments.")) return;
+
+      try {
+        const token = sessionStorage.getItem("token");
+        const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}`, {
+          method: "DELETE",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Failed to delete post");
+
+        alert("Post deleted successfully!");
+        fetchPosts();
+      } catch (error) {
+        console.error("Error deleting post:", error);
+      }
+    }
+
+    // 🔹 Delete Comment
+    async function deleteComment(message_id) {
+      if (!confirm("Are you sure you want to delete this comment?")) return;
+
+      try {
+        const token = sessionStorage.getItem("token");
+        const response = await fetch(`https://unified-campus-system.onrender.com/api/community/messages/${message_id}`, {
+          method: "DELETE",
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Failed to delete comment");
+
+        alert("Comment deleted successfully!");
+        fetchPosts();
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+      }
+    }
+
+
 
     // Fetch posts when the page loads
     document.addEventListener("DOMContentLoaded", fetchPosts);

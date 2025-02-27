@@ -4,7 +4,9 @@ const sequelize = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const cors = require("cors");
 const communityRoutes = require("./routes/communityRoutes");
-
+const homeRoutes = require("./routes/homeRoutes");
+// const counsellingRoutes=require("./routes/counsellingRoutes");
+const counsellingRoutes = require("./routes/counsellingRoutes"); 
 
 
 dotenv.config();
@@ -35,6 +37,8 @@ app.use(express.json()); // Middleware for parsing JSON
 
 app.use("/api/auth", authRoutes); // Mount auth routes
 app.use("/api/community", communityRoutes); // Community routes
+app.use("/api/homepage",homeRoutes);
+app.use("/api/counselling",counsellingRoutes);
 
 
 //Start server after DB connection

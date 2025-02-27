@@ -4,11 +4,13 @@ const sequelize = require("../config/db");
 const User = require("./User");
 const Thread = require("./Thread");
 const Message = require("./Message");
+const Counselling = require("./Counselling");
 
 // Register associations
-User.associate({ Thread, Message });
+User.associate({ Thread, Message, Counselling });
 Thread.associate({ User, Message });
 Message.associate({ User, Thread });
+Counselling.associate({User});
 
 // Export models
 module.exports = {
@@ -16,4 +18,5 @@ module.exports = {
   User,
   Thread,
   Message,
+  Counselling,
 };

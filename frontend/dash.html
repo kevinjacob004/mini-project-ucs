@@ -27,7 +27,7 @@
 <body class="dashboard-body">
   <header>
     <div class="logo">
-      <img src="logo.png" alt="College Logo" />
+      <!-- <img src="logo.png" alt="College Logo" /> -->
     </div>
     <nav>
       <ul>
@@ -40,7 +40,8 @@
     </nav>
   </header>
 
-  <div class="sidebar">
+  <div class="side-bar">  
+    <!-- class name changed from sidebar to side-bar -->
     <aside class="sidebar">
       <h2>Campus System</h2>
       <ul>
@@ -54,7 +55,7 @@
           <a href="#"><i class="fas fa-utensils"></i> Canteen</a>
         </li>
         <li>
-          <a href="#"><i class="fas fa-user-md"></i> Counseling</a>
+          <a href="counselling.html"><i class="fas fa-user-md"></i> Counseling</a>
         </li>
         <li>
           <a href="community.html"><i class="fas fa-users"></i> Community</a>
@@ -91,12 +92,12 @@
           <div class="stat-card">
             <h3>Canteen</h3>
             <p>Access and explore Canteen facilites</p>
-            <a href="#library">Explore</a>
+            <a href="#canteen">Explore</a>
           </div>
           <div class="stat-card">
             <h3>Counselling</h3>
             <p>Access and explore Counselling facilites</p>
-            <a href="#labs">Explore</a>
+            <a href="counselling.html">Explore</a>
           </div>
           <div class="stat-card">
             <h3>Community</h3>
@@ -112,8 +113,8 @@
         <div class="profile-card">
           <img src="profile-picture.jpg" alt="Profile Picture" />
           <div class="profile-info">
-            <h3>Username</h3>
-            <p>Student, Computer Science</p>
+            <h3 id="name-of-user"></h3>
+            <p id="branch-user">Student, Computer Science</p>
             <a href="#edit-profile">Edit Profile</a>
           </div>
         </div>
@@ -125,17 +126,17 @@
         <div class="facility-card">
           <h3>Canteen</h3>
           <p>Access and explore Canteen facilites</p>
-          <a href="#library">More Info</a>
+          <a href="#canteen">More Info</a>
         </div>
         <div class="facility-card">
           <h3>Counselling</h3>
           <p>Access and explore Counselling facilites</p>
-          <a href="#labs">More Info</a>
+          <a href="counselling.html">More Info</a>
         </div>
         <div class="facility-card">
           <h3>Community</h3>
           <p>Access and explore Community facilites</p>
-          <a href="#sports">More Info</a>
+          <a href="community.html">More Info</a>
         </div>
       </div>
     </section>
@@ -150,5 +151,56 @@
     </footer>
   </div>
 </body>
+
+<script>
+  // Retrieve the logged-in user's name from sessionStorage
+  const username = sessionStorage.getItem("username");
+  const fname = sessionStorage.getItem("fname");
+  const role = sessionStorage.getItem("role");
+
+  // Update the welcome message
+  const welcomeMessage = document.getElementById("name-of-user");
+  if (fname) {
+    welcomeMessage.textContent = ` ${fname}`;
+  } else if (username) {
+    welcomeMessage.textContent = `${username}`;
+  } else {
+    welcomeMessage.textContent = "User";
+  }
+
+  const branchuser = document.getElementById("branch-user");
+
+  if (username && typeof username === 'string') {
+    if (username.includes("CS")) {
+      branchuser.textContent = `${role},Computer Science` ;
+    } else if (username.includes("EC")) {
+      branchuser.textContent = `${role}, Electronics`;
+    }
+    else if (username.includes("EI")) {
+      branchuser.textContent = `${role}, Electronics & Instramentation`;
+    }else if (username.includes("ME")) {
+      branchuser.textContent = `${role}, Mechanical`;
+    }else if (username.includes("CE")) {
+      branchuser.textContent = `${role}, Civil`;
+    }
+     else {
+      // Default case if neither "CS" nor "EC" is found
+      branchuser.textContent = 'Staff';
+    }
+  } else {
+    console.error("Username is not defined or is not a string.");
+  }
+
+  function logout() {
+    // Clear user information from sessionStorage
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("fname");
+    sessionStorage.removeItem("lname");
+    sessionStorage.removeItem("id");
+
+    // Redirect to the login page
+    window.location.href = "auth.html";
+  }
+</script>
 
 </html>

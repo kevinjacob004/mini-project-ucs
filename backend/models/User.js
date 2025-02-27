@@ -21,7 +21,7 @@ const User = sequelize.define("Users", {
     unique: true,
   },
   role: {
-    type: DataTypes.ENUM('student', 'counselor', 'canteen_staff'),
+    type: DataTypes.ENUM('student', 'counsellor', 'canteen_staff'),
     allowNull: false,
   },
   email: {
@@ -34,13 +34,16 @@ const User = sequelize.define("Users", {
     allowNull: false,
   },
 }, {
-  timestamps: true,
+  tableName: 'Users', // Explicitly set the table name
+  timestamps: true, // Disable Sequelize's default timestamps
 });
 
 // Define associations
 User.associate = (models) => {
   User.hasMany(models.Thread, { foreignKey: "user_id" });
   User.hasMany(models.Message, { foreignKey: "user_id" });
+  User.hasMany(models.Counselling, { foreignKey: "student_id" });
+  User.hasMany(models.Counselling, { foreignKey: "counsellor_id" });
 };
 
 // Sync model with database
