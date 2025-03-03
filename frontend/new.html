@@ -16,3 +16,15 @@ uahnbu span#nav-footer-subtitle Admin label(for='nav-footer-toggle')
 i.fas.fa-caret-up #nav-footer-content Lorem ipsum dolor sit amet, consectetur
 adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
 aliqua.
+<!-- 
+${slot.report_exists ? `
+    <button onclick="viewReport(${slot.session_id})"
+        style="background-color: #28a745; color: white; padding: 6px 10px; border: none; border-radius: 5px; margin-top: 5px; cursor: pointer;">
+        View Report
+    </button>
+` : `
+    <button onclick="writeReport(${slot.session_id})"
+        style="background-color: #007bff; color: white; padding: 6px 10px; border: none; border-radius: 5px; margin-top: 5px; cursor: pointer;">
+        Write Report
+    </button>
+`} -->

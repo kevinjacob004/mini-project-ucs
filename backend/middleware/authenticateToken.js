@@ -11,10 +11,14 @@ function authenticateToken(req, res, next) {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {
             console.error("Token verification error:", err);
+            console.log("Received Auth Header:", req.headers["authorization"]);
+            console.log("Extracted Token:", token);
             return res.status(403).json({ message: "Invalid or expired token" });
         }
         req.user = user; // Attach user to the request object
         next();
+
+
     });
 }
 

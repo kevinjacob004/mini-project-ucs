@@ -5,13 +5,14 @@ const authRoutes = require("./routes/authRoutes");
 const cors = require("cors");
 const communityRoutes = require("./routes/communityRoutes");
 const homeRoutes = require("./routes/homeRoutes");
-// const counsellingRoutes=require("./routes/counsellingRoutes");
 const counsellingRoutes = require("./routes/counsellingRoutes"); 
-
+const counsellingReportRoutes=require("./routes/counsellingReportRoutes");
 
 dotenv.config();
 const app = express();
 
+
+console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
 
 
 
@@ -39,6 +40,7 @@ app.use("/api/auth", authRoutes); // Mount auth routes
 app.use("/api/community", communityRoutes); // Community routes
 app.use("/api/homepage",homeRoutes);
 app.use("/api/counselling",counsellingRoutes);
+app.use("/api/report",counsellingReportRoutes);
 
 
 //Start server after DB connection

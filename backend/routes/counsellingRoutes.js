@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { Counselling, User } = require("../models");
 const authenticateToken = require("../middleware/authenticateToken"); 
+const { CounsellingReport } = require("../models");
+
+
 
 
 // 🔹 Fetch available counsellors
@@ -302,6 +305,25 @@ router.put("/add-feedback/:session_id", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+// router.get("/available-slots/:counsellorId", async (req, res) => {
+//     try {
+//         const { counsellorId } = req.params;
+
+//         const slots = await CounsellorAvailability.findAll({
+//             where: { counsellor_id: counsellorId },
+//             attributes: ["available_time"], // Fetch only time slots
+//             order: [["available_time", "ASC"]], // Sort slots in ascending order
+//         });
+
+//         res.json(slots);
+//     } catch (error) {
+//         console.error("Error fetching available slots:", error);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
+
 
 
 
