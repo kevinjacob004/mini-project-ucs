@@ -36,7 +36,11 @@ router.post("/register", async (req, res) => {
             role = 'counselor';
         } else if (username.startsWith('CANSTAFF')) {
             role = 'canteen_staff';
-        } else {
+         } 
+        //else if (username.startsWith('ADMIN')) {
+        //     role = 'admin';
+        // }
+        else {
             return res.status(400).json({ error: "Invalid username prefix. Username must start with 'FIT', 'CON', or 'CANSTAFF'." });
         }
         // Create new user

@@ -7,12 +7,13 @@ const communityRoutes = require("./routes/communityRoutes");
 const homeRoutes = require("./routes/homeRoutes");
 const counsellingRoutes = require("./routes/counsellingRoutes"); 
 const counsellingReportRoutes=require("./routes/counsellingReportRoutes");
+const canteenRoutes=require("./routes/canteenRoutes");
 
 dotenv.config();
 const app = express();
 
 
-console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
+// console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
 
 
 
@@ -41,6 +42,7 @@ app.use("/api/community", communityRoutes); // Community routes
 app.use("/api/homepage",homeRoutes);
 app.use("/api/counselling",counsellingRoutes);
 app.use("/api/report",counsellingReportRoutes);
+app.use("/api/canteen",canteenRoutes);
 
 
 //Start server after DB connection
@@ -54,6 +56,3 @@ sequelize.authenticate()
 app.get('/',(req,res)=>{
     res.send("Running");
 });
-// app.listen(3000,()=>{
-//     console.log("Succcess\n");
-// });

@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canteen - Unified Campus System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* Your existing CSS styles */
+        body {
+            background-image: url("giphy1.gif");
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 210px;
+            background-color: #2b2b2b;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+
+        }
+
+        .sidebar ul li:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .sidebar ul li:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .sidebar ul li:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .sidebar ul li:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #3a3a3a;
+            border-radius: 5px;
+        }
+
+        .main-content {
+            /* background-image: url("giphy1.gif"); */
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        #adminPanel {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #adminPanel h2,
+        h3 {
+            color: #333;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #addItemForm {
+            margin-top: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="time"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* .menu-container,
+        .cart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item button {
+            background-color: #27ae60;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-item button:hover {
+            background-color: #219150;
+        } */
+
+
+        /* Menu Section Styling */
+        .menu {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .menu h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .menu-item p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .menu-item button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .menu-item button:hover {
+            background-color: #219150;
+        }
+
+        /* Add a subtle animation for loading menu items */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            animation: fadeIn 0.5s ease;
+        }
+
+
+        /* .cart-container button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .cart-container button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Cart Item Styling */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item span {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item .quantity-controls button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-item .quantity-controls button:hover {
+            background-color: #219150;
+        }
+
+        .cart-item .quantity-controls button.decrease {
+            background-color: #e74c3c;
+        }
+
+        .cart-item .quantity-controls button.decrease:hover {
+            background-color: #c0392b;
+        }
+
+        .cart-item .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            width: 100px;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-item .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        */
+
+        /* Cart Section Styling */
+        .cart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .cart-container h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cart-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item span {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .cart-item .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item .quantity-controls button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-item .quantity-controls button:hover {
+            background-color: #219150;
+        }
+
+        .cart-item .quantity-controls button.decrease {
+            background-color: #e74c3c;
+        }
+
+        .cart-item .quantity-controls button.decrease:hover {
+            background-color: #c0392b;
+        }
+
+        .cart-item .remove-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-item .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .cart-summary p {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .cart-summary .place-order-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-summary .place-order-btn:hover {
+            background-color: #219150;
+        }
+
+        /* Loading Spinner Styling */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #27ae60;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-spinner p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .error-message p {
+            font-size: 16px;
+            color: #555;
+            margin: 0;
+        }
+
+
+
+        /* Orders Section Styling */
+        .orders-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .orders-container h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #orders-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .order-item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .order-item h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .order-item p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .order-item ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 0 0;
+        }
+
+        .order-item ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .order-item ul li:last-child {
+            border-bottom: none;
+        }
+
+        .order-item ul li span:first-child {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .order-item ul li span:last-child {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Add a subtle animation for loading orders */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-item {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* No Orders and Error Messages */
+        .no-orders,
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        .no-orders p,
+        .error-message p {
+            font-size: 16px;
+            color: #555;
+            margin: 0;
+        }
+
+        .ready-button {
+            background-color: #4CAF50;
+            /* Green */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-left: 10px;
+            /* Add some spacing if there are other buttons */
+        }
+
+        .ready-button:hover {
+            background-color: #45a049;
+            /* Darker green */
+        }
+
+
+        .ready-orders-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .ready-orders-container h2 {
+            margin-top: 0;
+        }
+
+        .ready-orders-container .order-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .ready-orders-container .order-item h3 {
+            margin-top: 0;
+        }
+
+        .ready-orders-container .order-item ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .ready-orders-container .order-item ul li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .delivered-button {
+            background-color: #007bff;
+            /* Blue */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .delivered-button:hover {
+            background-color: #0056b3;
+            /* Darker blue */
+        }
+
+        .delivered-orders-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .delivered-orders-container h2 {
+            margin-top: 0;
+        }
+
+        .delivered-orders-container .order-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .delivered-orders-container .order-item h3 {
+            margin-top: 0;
+        }
+
+        .delivered-orders-container .order-item ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .delivered-orders-container .order-item ul li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .menu-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+
+        /* .edit-form {
+            margin-top: 10px;
+        }
+
+        .edit-form input {
+            padding: 5px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .edit-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-form button:hover {
+            background-color: #0056b3;
+        } */
+        /* Edit Form Styles */
+        .edit-form {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-form-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-form label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .edit-form input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .edit-form input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .edit-form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .edit-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Campus System</h2>
+        <ul>
+            <li><a href="homepage.html"><i class="fas fa-home"> </i> Home</a></li>
+            <li><a href="dash.html"><i class="fas fa-chart-line"> </i> Dashboard</a></li>
+            <li><a href="canteen.html"><i class="fas fa-utensils"> </i> Canteen</a></li>
+            <li><a href="counselling.html"><i class="fas fa-user-md"> </i> Counseling</a></li>
+            <li><a href="community.html"><i class="fas fa-users"> </i> Community</a></li>
+            <li><a href="index.html" class="logout"><i class="fas fa-sign-out-alt"> </i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Canteen Menu</h1>
+            <!-- <button class="profile-btn">Profile</button> -->
+        </header>
+
+        <!-- Cart Section (Visible only to non-canteen staff) -->
+        <!-- <section class="cart-container" id="cartSection" style="display: none;">
+            <h2>Your Cart</h2>
+            <ul id="cart-items"></ul>
+            <p>Total: ₹<span id="total-price">0.00</span></p>
+            <button onclick="placeOrder()">Place Order</button>
+        </section> -->
+        <!-- Cart Section -->
+        <section class="cart-container" id="cartSection" style="display: none;">
+            <h2>Your Cart</h2>
+            <div id="cart-loading" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading cart...</p>
+            </div>
+            <ul id="cart-items" class="cart-list"></ul>
+            <div class="cart-summary">
+                <p>Total: ₹<span id="total-price">0.00</span></p>
+                <button onclick="placeOrder()" class="place-order-btn">Place Order</button>
+            </div>
+        </section>
+
+        <!-- Add Menu Item Form (Visible only to Canteen Staff) -->
+        <!-- <section id="adminPanel" style="display: none;">
+            <h2>Canteen Staff Panel</h2>
+            <button onclick="toggleAddItemForm()">➕ Add Item</button>
+            <div id="addItemForm" style="display: none;">
+                <h3>Add New Menu Item</h3>
+                <input type="text" id="itemName" placeholder="Item Name" required />
+                <input type="text" id="itemDescription" placeholder="Description" required />
+                <input type="number" id="itemPrice" placeholder="Price" required />
+                <input type="number" id="itemQuantity" placeholder="Quantity" required />
+                <input type="time" id="availableFrom" required />
+                <input type="time" id="availableTo" required />
+                <button onclick="addMenuItem()">Add Item</button>
+            </div>
+        </section> -->
+
+        <section id="adminPanel" style="display: none;">
+            <h2>Canteen Staff Panel</h2>
+            <button onclick="toggleAddItemForm()">➕ Add Item</button>
+            <div id="addItemForm" style="display: none;">
+                <h3>Add New Menu Item</h3>
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input type="text" id="itemName" placeholder="Item Name" required />
+                </div>
+                <div class="form-group">
+                    <label for="itemDescription">Description</label>
+                    <input type="text" id="itemDescription" placeholder="Description" required />
+                </div>
+                <div class="form-group">
+                    <label for="itemPrice">Price</label>
+                    <input type="number" id="itemPrice" placeholder="Price" required />
+                </div>
+                <div class="form-group">
+                    <label for="itemQuantity">Quantity</label>
+                    <input type="number" id="itemQuantity" placeholder="Quantity" required />
+                </div>
+                <div class="form-group">
+                    <label for="availableFrom">Available From</label>
+                    <input type="time" id="availableFrom" required />
+                </div>
+                <div class="form-group">
+                    <label for="availableTo">Available To</label>
+                    <input type="time" id="availableTo" required />
+                </div>
+                <button onclick="addMenuItem()">Add Item</button>
+            </div>
+            <div id="alertMessage" class="alert"></div>
+        </section>
+
+
+
+        <!-- Menu Section -->
+        <section class="menu">
+            <h2>Available Items</h2>
+            <div id="loading" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading menu...</p>
+            </div>
+            <div id="menu-items" class="menu-grid"></div>
+        </section>
+
+        <!-- Orders Section -->
+        <section class="orders-container" id="ordersSection" style="display: none;">
+            <h2>Your Current Orders</h2>
+            <ul id="orders-list"></ul>
+        </section>
+
+        <!-- Ready Orders Section -->
+        <section class="ready-orders-container" id="readyOrdersSection" style="display: none;">
+            <h2>Ready Orders</h2>
+            <ul id="ready-orders-list"></ul>
+        </section>
+
+        <!-- Delivered Orders Section -->
+        <section class="delivered-orders-container" id="deliveredOrdersSection" style="display: none;">
+            <h2>Delivered Orders</h2>
+            <ul id="delivered-orders-list"></ul>
+        </section>
+
+    </div>
+
+    <script>
+        const apiUrl = "https://unified-campus-system.onrender.com/api/canteen"; // Adjust based on your backend
+
+        // Check user role on page load
+        function checkUserRole() {
+            const role = sessionStorage.getItem("role");
+            if (role === 'canteen_staff') {
+                // Show admin panel for canteen staff
+                document.getElementById("adminPanel").style.display = "block";
+            } else if(role!=='admin') {
+                // Show cart section for non-canteen staff
+                document.getElementById("cartSection").style.display = "block";
+            }
+        }
+
+        // Fetch menu items from the backend
+        // async function fetchMenu() {
+        //     try {
+        //         const response = await fetch(`${apiUrl}/fmenu`);
+        //         const menu = await response.json();
+        //         const menuContainer = document.getElementById("menu-items");
+        //         menuContainer.innerHTML = "";
+        //         if (menu.length === 0) {
+        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
+        //             return;
+        //         }
+        //         menu.forEach(item => {
+        //             menuContainer.innerHTML += `
+        //                 <div class="menu-item">
+        //                     <h3>${item.item_name}</h3>
+        //                     <p>${item.item_description}</p>
+        //                     <p>₹${item.price}</p>
+        //                     <p>Available: ${item.available_from} - ${item.available_to}</p>
+        //                     ${sessionStorage.getItem("role") === 'canteen_staff' ? '' : `<button onclick="addToCart(${item.menu_id}, '${item.item_name}', ${item.price})">Add to Cart</button>`}
+        //                 </div>`;
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching menu:", error);
+        //     }
+        // }
+
+
+        // async function fetchMenu() {
+        //     const menuContainer = document.getElementById("menu-items");
+        //     const loadingSpinner = document.getElementById("loading");
+
+        //     try {
+        //         // Show loading spinner
+        //         loadingSpinner.style.display = "flex";
+        //         menuContainer.innerHTML = "";
+
+        //         const response = await fetch(`${apiUrl}/fmenu`);
+        //         const menu = await response.json();
+
+        //         // Hide loading spinner
+        //         loadingSpinner.style.display = "none";
+
+        //         if (menu.length === 0) {
+        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
+        //             return;
+        //         }
+
+        //         menu.forEach(item => {
+        //             const menuItem = document.createElement("div");
+        //             menuItem.className = "menu-item";
+
+        //             menuItem.innerHTML = `
+        //         <h3>${item.item_name}</h3>
+        //         <p>${item.item_description}</p>
+        //         <p>₹${item.price}</p>
+        //         <p>Available: ${item.available_from} - ${item.available_to}</p>
+        //         ${sessionStorage.getItem("role") === 'canteen_staff' ? '' : `<button onclick="addToCart(${item.menu_id}, '${item.item_name}', ${item.price})">Add to Cart</button>`}
+        //     `;
+        //             menuContainer.appendChild(menuItem);
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching menu:", error);
+        //         // Hide loading spinner and show error message
+        //         loadingSpinner.style.display = "none";
+        //         menuContainer.innerHTML = `
+        //     <div class="error-message">
+        //         <p>Failed to fetch menu. Please try again later.</p>
+        //     </div>
+        // `;
+        //     }
+        // }
+        // async function fetchMenu() {
+        //     const menuContainer = document.getElementById("menu-items");
+        //     const loadingSpinner = document.getElementById("loading");
+
+        //     try {
+        //         // Show loading spinner
+        //         loadingSpinner.style.display = "flex";
+        //         menuContainer.innerHTML = "";
+
+        //         const response = await fetch(`${apiUrl}/fmenu`);
+        //         const menu = await response.json();
+
+        //         // Hide loading spinner
+        //         loadingSpinner.style.display = "none";
+
+        //         if (menu.length === 0) {
+        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
+        //             return;
+        //         }
+
+        //         const role = sessionStorage.getItem("role");
+
+        //         menu.forEach(item => {
+        //             // For students, only display items with quantity > 0
+        //             if (role === 'student' && item.quantity <= 0) {
+        //                 return; // Skip this item
+        //             }
+
+        //             const menuItem = document.createElement("div");
+        //             menuItem.className = "menu-item";
+
+        //             menuItem.innerHTML = `
+        //         <h3>${item.item_name}</h3>
+        //         <p>${item.item_description}</p>
+        //         <p>₹${item.price}</p>
+        //         <p>Available: ${item.available_from} - ${item.available_to}</p>
+        //         <p>Quantity: ${item.quantity}</p>
+        //     `;
+
+        //             // Add edit functionality for canteen_staff
+        //             if (role === 'canteen_staff') {
+        //                 const editForm = document.createElement("div");
+        //                 editForm.className = "edit-form";
+
+        //                 editForm.innerHTML = `
+        //                 <p>Update Price</p>
+        //             <input type="number" id="price-${item.menu_id}" value="${item.price}" placeholder="Price" />
+        //             <p>Update Quantity</p>
+        //             <input type="number" id="quantity-${item.menu_id}" value="${item.quantity}" placeholder="Quantity" />
+        //             <button onclick="updateMenuItem(${item.menu_id})">Update</button>
+        //         `;
+
+        //                 menuItem.appendChild(editForm);
+        //             } else {
+        //                 // Add to Cart button for students
+        //                 const addToCartButton = document.createElement("button");
+        //                 addToCartButton.textContent = "Add to Cart";
+        //                 addToCartButton.onclick = () => addToCart(item.menu_id, item.item_name, item.price);
+        //                 menuItem.appendChild(addToCartButton);
+        //             }
+
+        //             menuContainer.appendChild(menuItem);
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching menu:", error);
+        //         // Hide loading spinner and show error message
+        //         loadingSpinner.style.display = "none";
+        //         menuContainer.innerHTML = `
+        //     <div class="error-message">
+        //         <p>Failed to fetch menu. Please try again later.</p>
+        //     </div>
+        // `;
+        //     }
+        // }
+        async function fetchMenu() {
+            const menuContainer = document.getElementById("menu-items");
+            const loadingSpinner = document.getElementById("loading");
+
+            try {
+                // Show loading spinner
+                loadingSpinner.style.display = "flex";
+                menuContainer.innerHTML = "";
+
+                const response = await fetch(`${apiUrl}/fmenu`);
+                const menu = await response.json();
+
+                // Hide loading spinner
+                loadingSpinner.style.display = "none";
+
+                if (menu.length === 0) {
+                    menuContainer.innerHTML = "<p>No items available in the menu.</p>";
+                    return;
+                }
+
+                const role = sessionStorage.getItem("role");
+
+                menu.forEach(item => {
+                    // For students, only display items with quantity > 0
+                    if (role === 'student' && item.quantity <= 0) {
+                        return; // Skip this item
+                    }
+
+                    const menuItem = document.createElement("div");
+                    menuItem.className = "menu-item";
+
+                    menuItem.innerHTML = `
+                <h3>${item.item_name}</h3>
+                <p>Description: ${item.item_description}</p>
+                <p>Price: ₹${item.price}</p>
+                <p>Available: ${item.available_from} - ${item.available_to}</p>
+                <p>Quantity: ${item.quantity}</p>
+            `;
+
+                    // Add edit functionality for canteen_staff
+                    if (role === 'canteen_staff'||role==='admin') {
+                        const editForm = document.createElement("div");
+                        editForm.className = "edit-form";
+
+                        editForm.innerHTML = `
+                    <div class="edit-form-content">
+                        <label for="price-${item.menu_id}">Price</label>
+                        <input type="number" id="price-${item.menu_id}" value="${item.price}" placeholder="Price" />
+                        <label for="quantity-${item.menu_id}">Quantity</label>
+                        <input type="number" id="quantity-${item.menu_id}" value="${item.quantity}" placeholder="Quantity" />
+                        <button onclick="updateMenuItem(${item.menu_id})">Update</button>
+                    </div>
+                `;
+
+                        menuItem.appendChild(editForm);
+                    } else {
+                        // Add to Cart button for students
+                        const addToCartButton = document.createElement("button");
+                        addToCartButton.textContent = "Add to Cart";
+                        addToCartButton.onclick = () => addToCart(item.menu_id, item.item_name, item.price);
+                        menuItem.appendChild(addToCartButton);
+                    }
+
+                    menuContainer.appendChild(menuItem);
+                });
+            } catch (error) {
+                console.error("Error fetching menu:", error);
+                // Hide loading spinner and show error message
+                loadingSpinner.style.display = "none";
+                menuContainer.innerHTML = `
+            <div class="error-message">
+                <p>Failed to fetch menu. Please try again later.</p>
+            </div>
+        `;
+            }
+        }
+
+        async function updateMenuItem(menuId) {
+            try {
+                const price = document.getElementById(`price-${menuId}`).value;
+                const quantity = document.getElementById(`quantity-${menuId}`).value;
+                const role = sessionStorage.getItem("role");
+
+                const response = await fetch(`${apiUrl}/menu/${menuId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                        "Role": role,
+                    },
+                    body: JSON.stringify({ price, quantity })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to update menu item");
+                }
+
+                const result = await response.json();
+                alert(result.message); // Show success message
+                fetchMenu(); // Refresh the menu
+            } catch (error) {
+                console.error("Error updating menu item:", error);
+                alert("Failed to update menu item");
+            }
+        }
+
+        // Add item to cart (for non-canteen staff)
+        async function addToCart(item_id, item_name, price) {
+            try {
+                const user_id = sessionStorage.getItem("id");
+                if (!user_id) {
+                    alert("Please log in to add items to the cart.");
+                    return;
+                }
+
+                const response = await fetch(`${apiUrl}/cart/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify({ user_id, item_id, quantity: 1, price })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to add item to cart");
+                }
+
+                const data = await response.json();
+                alert(`Added ${item_name} (₹${price}) to cart.`);
+                fetchCartItems(); // Refresh the cart
+            } catch (error) {
+                console.error("Error adding item to cart:", error);
+                alert("Failed to add item to cart.");
+            }
+        }
+
+        // Fetch cart items (for non-canteen staff)
+        // async function fetchCartItems() {
+        //     try {
+        //         const user_id = sessionStorage.getItem("id");
+        //         if (!user_id) return;
+
+        //         const response = await fetch(`${apiUrl}/cart/${user_id}`, {
+        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to fetch cart items");
+        //         }
+
+        //         const cartItems = await response.json();
+        //         const cartContainer = document.getElementById("cart-items");
+        //         const totalPriceElement = document.getElementById("total-price");
+
+        //         cartContainer.innerHTML = "";
+        //         let totalPrice = 0;
+
+        //         cartItems.forEach(item => {
+        //             const cartItemElement = document.createElement("li");
+        //             cartItemElement.innerHTML = `
+        //                 <span>${item.MenuItem.item_name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</span>
+        //                 <button onclick="removeFromCart(${item.id})">❌</button>
+        //             `;
+        //             cartContainer.appendChild(cartItemElement);
+        //             totalPrice += item.price * item.quantity;
+        //         });
+
+        //         totalPriceElement.textContent = totalPrice.toFixed(2);
+        //     } catch (error) {
+        //         console.error("Error fetching cart items:", error);
+        //     }
+        // }
+
+        // Fetch cart items
+        // async function fetchCartItems() {
+        //     try {
+        //         const user_id = sessionStorage.getItem("id");
+        //         if (!user_id) return;
+
+        //         const response = await fetch(`${apiUrl}/cart/${user_id}`, {
+        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to fetch cart items");
+        //         }
+
+        //         const cartItems = await response.json();
+        //         const cartContainer = document.getElementById("cart-items");
+        //         const totalPriceElement = document.getElementById("total-price");
+
+        //         cartContainer.innerHTML = "";
+        //         let totalPrice = 0;
+
+        //         cartItems.forEach(item => {
+        //             const cartItemElement = document.createElement("li");
+        //             cartItemElement.className = "cart-item";
+
+        //             cartItemElement.innerHTML = `
+        //         <span>${item.MenuItem.item_name} - ₹${item.price}</span>
+        //         <div class="quantity-controls">
+        //             <button onclick="updateQuantity(${item.id}, 'decrease')" class="decrease">-</button>
+        //             <span>${item.quantity}</span>
+        //             <button onclick="updateQuantity(${item.id}, 'increase')">+</button>
+        //         </div>
+        //         <button onclick="removeFromCart(${item.id})" class="remove-btn">Remove</button>
+        //     `;
+        //             cartContainer.appendChild(cartItemElement);
+        //             totalPrice += item.price;
+        //         });
+
+        //         totalPriceElement.textContent = totalPrice.toFixed(2);
+        //     } catch (error) {
+        //         console.error("Error fetching cart items:", error);
+        //     }
+        // }
+
+
+
+        async function fetchCartItems() {
+            const cartContainer = document.getElementById("cart-items");
+            const loadingSpinner = document.getElementById("cart-loading");
+
+            try {
+                // Show loading spinner
+                loadingSpinner.style.display = "flex";
+                cartContainer.innerHTML = "";
+
+                const user_id = sessionStorage.getItem("id");
+                if (!user_id) return;
+
+                const response = await fetch(`${apiUrl}/cart/${user_id}`, {
+                    headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch cart items");
+                }
+
+                const cartItems = await response.json();
+                const totalPriceElement = document.getElementById("total-price");
+
+                // Hide loading spinner
+                loadingSpinner.style.display = "none";
+
+                let totalPrice = 0;
+
+                cartItems.forEach(item => {
+                    const cartItemElement = document.createElement("li");
+                    cartItemElement.className = "cart-item";
+
+                    cartItemElement.innerHTML = `
+                <span>${item.MenuItem.item_name} - ₹${item.price.toFixed(2)}</span>
+                <div class="quantity-controls">
+                    <button onclick="updateQuantity(${item.id}, 'decrease')" class="decrease">-</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="updateQuantity(${item.id}, 'increase')">+</button>
+                </div>
+                <button onclick="removeFromCart(${item.id})" class="remove-btn">Remove</button>
+            `;
+                    cartContainer.appendChild(cartItemElement);
+                    totalPrice += item.price;
+                });
+
+                totalPriceElement.textContent = totalPrice.toFixed(2);
+            } catch (error) {
+                console.error("Error fetching cart items:", error);
+                // Hide loading spinner and show error message
+                loadingSpinner.style.display = "none";
+                cartContainer.innerHTML = `
+            <div class="error-message">
+                <p>No items selected.</p>
+            </div>
+        `;
+            }
+        }
+
+
+
+
+
+
+
+
+
+        // Update quantity of an item in the cart
+        // Update quantity of an item in the cart
+        // Update quantity of an item in the cart
+        async function updateQuantity(orderItemId, action) {
+            try {
+                const user_id = sessionStorage.getItem("id");
+                if (!user_id) {
+                    alert("Please log in to update the cart.");
+                    return;
+                }
+
+                const response = await fetch(`${apiUrl}/cart/update/${orderItemId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify({ action }) // Send 'increase' or 'decrease'
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to update item quantity");
+                }
+
+                const data = await response.json();
+                alert(`Quantity updated: ${data.quantity}`);
+
+                // Update the total price and item price in the UI
+                const totalPriceElement = document.getElementById("total-price");
+                totalPriceElement.textContent = data.total_price.toFixed(2);
+
+                fetchCartItems(); // Refresh the cart
+            } catch (error) {
+                console.error("Error updating item quantity:", error);
+                alert("Failed to update item quantity.");
+            }
+        }
+
+
+        // Remove item from cart (for non-canteen staff)
+        async function removeFromCart(orderItemId) {
+            try {
+                const response = await fetch(`${apiUrl}/cart/remove/${orderItemId}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to remove item from cart");
+                }
+
+                alert("Item removed from cart.");
+                fetchCartItems(); // Refresh the cart
+            } catch (error) {
+                console.error("Error removing item from cart:", error);
+            }
+        }
+
+        // Place order (for non-canteen staff)
+        async function placeOrder() {
+            try {
+                const user_id = sessionStorage.getItem("id");
+                if (!user_id) {
+                    alert("Please log in to place an order.");
+                    return;
+                }
+
+                const response = await fetch(`${apiUrl}/order/place`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+                    },
+                    body: JSON.stringify({ user_id })
+                });
+
+
+                //const result = await response.json(); // Parse the response JSON
+                const orderData = await response.json();
+                if (response.status === 400) {
+                    alert(`❌ ${orderData.error}`); // Handle 400 Bad Request specifically
+                    return; // Return early to avoid executing the catch block
+                }
+                else if (!response.ok) {
+                    throw new Error("Failed to place order"); // Handle all other non-2xx status codes
+                }
+
+
+                alert("Order placed successfully!");
+                fetchCartItems(); // Refresh the cart
+                fetchDeliveredOrders();
+                fetchOrders();
+                fetchReadyOrders();
+            } catch (error) {
+                console.error("Error placing order:", error);
+                alert("Failed to place order.");
+            }
+        }
+
+        // Add new menu item (for canteen staff)
+        // async function addMenuItem() {
+        //     try {
+        //         const item_name = document.getElementById("itemName").value;
+        //         const item_description = document.getElementById("itemDescription").value;
+        //         const price = document.getElementById("itemPrice").value;
+        //         const quantity = document.getElementById("itemQuantity").value;
+        //         const available_from = document.getElementById("availableFrom").value;
+        //         const available_to = document.getElementById("availableTo").value;
+
+        //         const response = await fetch(`${apiUrl}/menu`, {
+        //             method: "POST",
+        //             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}` },
+        //             body: JSON.stringify({ item_name, item_description, price, quantity, available_from, available_to })
+        //         });
+
+        //         if (response.ok) {
+        //             alert("✅ Item added successfully!");
+        //             fetchMenu();
+        //         } else {
+        //             alert("❌ Failed to add item");
+        //         }
+        //     } catch (error) {
+        //         console.error("❌ Error adding menu item:", error);
+        //     }
+        // }
+
+        // // Toggle add item form visibility (for canteen staff)
+        // function toggleAddItemForm() {
+        //     const form = document.getElementById("addItemForm");
+        //     form.style.display = form.style.display === "none" ? "block" : "none";
+        // }
+
+        async function addMenuItem() {
+            try {
+                const item_name = document.getElementById("itemName").value;
+                const item_description = document.getElementById("itemDescription").value;
+                const price = document.getElementById("itemPrice").value;
+                const quantity = document.getElementById("itemQuantity").value;
+                const available_from = document.getElementById("availableFrom").value;
+                const available_to = document.getElementById("availableTo").value;
+
+                if (!item_name || !item_description || !price || !quantity || !available_from || !available_to) {
+                    showAlert("Please fill in all fields", "error");
+                    return;
+                }
+
+                const response = await fetch(`${apiUrl}/menu`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}` },
+                    body: JSON.stringify({ item_name, item_description, price, quantity, available_from, available_to })
+                });
+
+                if (response.ok) {
+                    showAlert("✅ Item added successfully!", "success");
+                    fetchMenu();
+                    toggleAddItemForm();
+                } else {
+                    showAlert("❌ Failed to add item", "error");
+                }
+            } catch (error) {
+                console.error("❌ Error adding menu item:", error);
+                showAlert("❌ An error occurred while adding the item", "error");
+            }
+        }
+
+        function toggleAddItemForm() {
+            const form = document.getElementById("addItemForm");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.getElementById("alertMessage");
+            alertDiv.textContent = message;
+            alertDiv.className = `alert ${type}`;
+            alertDiv.style.display = "block";
+
+            setTimeout(() => {
+                alertDiv.style.display = "none";
+            }, 3000);
+        }
+
+        // Fetch orders
+        // async function fetchOrders() {
+        //     try {
+        //         const role = sessionStorage.getItem('role');
+        //         console.log(role);
+        //         const response = await fetch(`${apiUrl}/orders`, {
+        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to fetch orders");
+        //         }
+
+        //         const orders = await response.json();
+        //         const ordersList = document.getElementById("orders-list");
+        //         ordersList.innerHTML = "";
+
+        //         if (orders.length === 0) {
+        //             ordersList.innerHTML = "<p>No orders found.</p>";
+        //             return;
+        //         }
+
+        //         orders.forEach(order => {
+        //             const orderItem = document.createElement("li");
+        //             orderItem.className = "order-item";
+
+        //             orderItem.innerHTML = `
+        //         <h3>Order ID: ${order.order_id}</h3>
+        //         <p>Status: ${order.order_status}</p>
+        //         <p>Total Price: ₹${order.total_price.toFixed(2)}</p>
+        //         <p>Ordered by: ${order.User ? order.User.first_name : order.user_id}</p>
+        //         <ul>
+        //             ${order.OrderItems.map(item => `
+        //                 <li>
+        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+        //                     <span>₹${item.price.toFixed(2)}</span>
+        //                 </li>
+        //             `).join("")}
+        //         </ul>
+        //     `;
+        //             ordersList.appendChild(orderItem);
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching orders:", error);
+        //         alert("Failed to fetch orders.");
+        //     }
+        // }
+
+        // Fetch orders
+        // async function fetchOrders() {
+        //     try {
+        //         const role = sessionStorage.getItem('role');
+        //         const response = await fetch(`${apiUrl}/orders`, {
+        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to fetch orders");
+        //         }
+
+        //         const orders = await response.json();
+        //         const ordersList = document.getElementById("orders-list");
+        //         ordersList.innerHTML = "";
+
+        //         if (orders.length === 0) {
+        //             ordersList.innerHTML = "<p>No orders found.</p>";
+        //             return;
+        //         }
+
+        //         orders.forEach(order => {
+        //             const orderItem = document.createElement("li");
+        //             orderItem.className = "order-item";
+
+        //             orderItem.innerHTML = `
+        //         <h3>Order ID: ${order.order_id}</h3>
+        //         <p>Status: <span class="status">${order.order_status}</span></p>
+        //         <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
+        //         <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
+        //         <ul>
+        //             ${order.OrderItems.map(item => `
+        //                 <li>
+        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+        //                     <span>₹${item.price.toFixed(2)}</span>
+        //                 </li>
+        //             `).join("")}
+        //         </ul>
+        //     `;
+        //             ordersList.appendChild(orderItem);
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching orders:", error);
+        //         alert("Failed to fetch orders.");
+        //     }
+        // }
+        // Fetch orders
+        async function fetchOrders() {
+            try {
+                const role = sessionStorage.getItem('role');
+                const response = await fetch(`${apiUrl}/orders`, {
+                    headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch orders");
+                }
+
+                const orders = await response.json();
+                const ordersList = document.getElementById("orders-list");
+                ordersList.innerHTML = "";
+
+                if (orders.length === 0) {
+                    // Display a friendly message if no orders are found
+                    ordersList.innerHTML = `
+                <div class="no-orders">
+                    <p>No orders found.</p>
+                </div>
+            `;
+                    return;
+                }
+
+                // Render the orders
+                orders.forEach(order => {
+                    const orderItem = document.createElement("li");
+                    orderItem.className = "order-item";
+
+                    orderItem.innerHTML = `
+                <h3>Order ID: ${order.order_id}</h3>
+                <p>Status: <span class="status">${order.order_status}</span></p>
+                <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
+                <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
+                <ul>
+                    ${order.OrderItems.map(item => `
+                        <li>
+                            <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+                            <span>₹${item.price.toFixed(2)}</span>
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+                    // Add a Cancel button for users (not canteen_staff)
+                    if (role !== 'canteen_staff' && order.order_status === 'placed') {
+                        const cancelButton = document.createElement("button");
+                        cancelButton.textContent = "Cancel Order";
+                        cancelButton.className = "cancel-button";
+                        cancelButton.onclick = () => cancelOrder(order.order_id); // Trigger cancel function
+                        orderItem.appendChild(cancelButton);
+                    }
+
+                    // Add a Mark as Ready button for canteen_staff
+                    if (role === 'canteen_staff' && order.order_status === 'placed') {
+                        const readyButton = document.createElement("button");
+                        readyButton.textContent = "Mark as Ready";
+                        readyButton.className = "ready-button";
+                        readyButton.onclick = () => markOrderAsReady(order.order_id); // Trigger mark as ready function
+                        orderItem.appendChild(readyButton);
+                    }
+
+
+                    ordersList.appendChild(orderItem);
+                });
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                // Display a user-friendly error message
+                const ordersList = document.getElementById("orders-list");
+                ordersList.innerHTML = `
+            <div class="error-message">
+                <p>Failed to fetch orders. Please try again later.</p>
+            </div>
+        `;
+            }
+        }
+        async function cancelOrder(orderId) {
+            try {
+                const role=sessionStorage.getItem("role");
+                const response = await fetch(`${apiUrl}/orders/${orderId}/cancel`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                        "Role" : role,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to cancel order");
+                }
+
+                const result = await response.json();
+                alert(result.message); // Show success message
+                fetchOrders(); // Refresh the orders list
+            } catch (error) {
+                console.error("Error cancelling order:", error);
+                alert("Failed to cancel order");
+            }
+        }
+
+        async function markOrderAsReady(orderId) {
+            try {
+                // console.log(role);
+                const response = await fetch(`${apiUrl}/orders/${orderId}/ready`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                        "Role": sessionStorage.getItem("role") // Include role in headers
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to mark order as ready");
+                }
+
+                const result = await response.json();
+                alert(result.message); // Show success message
+                fetchOrders(); // Refresh the orders list
+                fetchDeliveredOrders();
+                fetchReadyOrders();
+
+            } catch (error) {
+                console.error("Error marking order as ready:", error);
+                alert("Failed to mark order as ready");
+            }
+        }
+
+
+        // Show orders section based on user role
+        function showOrdersSection() {
+            const role = sessionStorage.getItem("role");
+            if (role === 'canteen_staff' || role === 'student'||role==='admin') {
+                document.getElementById("ordersSection").style.display = "block";
+                fetchOrders(); // Fetch orders when the section is shown
+            }
+        }
+
+        // Fetch and display ready orders
+        // async function fetchReadyOrders() {
+        //     try {
+        //         const role = sessionStorage.getItem('role');
+        //         const response = await fetch(`${apiUrl}/orders/ready`, {
+        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to fetch ready orders");
+        //         }
+
+        //         const readyOrders = await response.json();
+        //         const readyOrdersList = document.getElementById("ready-orders-list");
+        //         readyOrdersList.innerHTML = "";
+
+        //         if (readyOrders.length === 0) {
+        //             // Display a friendly message if no ready orders are found
+        //             readyOrdersList.innerHTML = `
+        //         <div class="no-orders">
+        //             <p>No ready orders found.</p>
+        //         </div>
+        //     `;
+        //             return;
+        //         }
+
+        //         // Render the ready orders
+        //         readyOrders.forEach(order => {
+        //             const orderItem = document.createElement("li");
+        //             orderItem.className = "order-item";
+
+        //             orderItem.innerHTML = `
+        //         <h3>Order ID: ${order.order_id}</h3>
+        //         <p>Status: <span class="status">${order.order_status}</span></p>
+        //         <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
+        //         <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
+        //         <ul>
+        //             ${order.OrderItems.map(item => `
+        //                 <li>
+        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+        //                     <span>₹${item.price.toFixed(2)}</span>
+        //                 </li>
+        //             `).join("")}
+        //         </ul>
+        //     `;
+
+        //             readyOrdersList.appendChild(orderItem);
+        //         });
+        //     } catch (error) {
+        //         console.error("Error fetching ready orders:", error);
+        //         // Display a user-friendly error message
+        //         const readyOrdersList = document.getElementById("ready-orders-list");
+        //         readyOrdersList.innerHTML = `
+        //     <div class="error-message">
+        //         <p>Failed to fetch ready orders. Please try again later.</p>
+        //     </div>
+        // `;
+        //     }
+        // }
+
+        async function fetchReadyOrders() {
+            try {
+                const role = sessionStorage.getItem('role');
+                const response = await fetch(`${apiUrl}/orders/ready`, {
+                    headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch ready orders");
+                }
+
+                const readyOrders = await response.json();
+                const readyOrdersList = document.getElementById("ready-orders-list");
+                readyOrdersList.innerHTML = "";
+
+                if (readyOrders.length === 0) {
+                    // Display a friendly message if no ready orders are found
+                    readyOrdersList.innerHTML = `
+                <div class="no-orders">
+                    <p>No ready orders found.</p>
+                </div>
+            `;
+                    return;
+                }
+
+                // Render the ready orders
+                readyOrders.forEach(order => {
+                    const orderItem = document.createElement("li");
+                    orderItem.className = "order-item";
+
+                    orderItem.innerHTML = `
+                <h3>Order ID: ${order.order_id}</h3>
+                <p>Status: <span class="status">${order.order_status}</span></p>
+                <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
+                <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
+                <ul>
+                    ${order.OrderItems.map(item => `
+                        <li>
+                            <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+                            <span>₹${item.price.toFixed(2)}</span>
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+
+                    // Add a Mark as Delivered button for canteen_staff
+                    if (role === 'canteen_staff') {
+                        const deliveredButton = document.createElement("button");
+                        deliveredButton.textContent = "Mark as Delivered";
+                        deliveredButton.className = "delivered-button";
+                        deliveredButton.onclick = () => markOrderAsDelivered(order.order_id); // Trigger mark as delivered function
+                        orderItem.appendChild(deliveredButton);
+                    }
+
+                    readyOrdersList.appendChild(orderItem);
+                });
+            } catch (error) {
+                console.error("Error fetching ready orders:", error);
+                // Display a user-friendly error message
+                const readyOrdersList = document.getElementById("ready-orders-list");
+                readyOrdersList.innerHTML = `
+            <div class="error-message">
+                <p>Failed to fetch ready orders. Please try again later.</p>
+            </div>
+        `;
+            }
+        }
+
+        async function markOrderAsDelivered(orderId) {
+            try {
+                const response = await fetch(`${apiUrl}/orders/${orderId}/delivered`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+                        "Role": sessionStorage.getItem("role") // Include role in headers
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to mark order as delivered");
+                }
+
+                const result = await response.json();
+                alert(result.message); // Show success message
+                fetchReadyOrders(); // Refresh the ready orders list
+                fetchDeliveredOrders();
+                fetchOrders();
+            } catch (error) {
+                console.error("Error marking order as delivered:", error);
+                alert("Failed to mark order as delivered");
+            }
+        }
+
+        // Show ready orders section based on user role
+        function showReadyOrdersSection() {
+            const role = sessionStorage.getItem("role");
+            if (role === 'canteen_staff' || role === 'student'||role==='admin') {
+                document.getElementById("readyOrdersSection").style.display = "block";
+                fetchReadyOrders(); // Fetch ready orders when the section is shown
+            }
+        }
+
+        // Fetch and display delivered orders
+        async function fetchDeliveredOrders() {
+            try {
+                const role = sessionStorage.getItem('role');
+                const response = await fetch(`${apiUrl}/orders/delivered`, {
+                    headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch delivered orders");
+                }
+
+                const deliveredOrders = await response.json();
+                const deliveredOrdersList = document.getElementById("delivered-orders-list");
+                deliveredOrdersList.innerHTML = "";
+
+                if (deliveredOrders.length === 0) {
+                    // Display a friendly message if no delivered orders are found
+                    deliveredOrdersList.innerHTML = `
+                <div class="no-orders">
+                    <p>No delivered orders found.</p>
+                </div>
+            `;
+                    return;
+                }
+
+                // Render the delivered orders
+                deliveredOrders.forEach(order => {
+                    const orderItem = document.createElement("li");
+                    orderItem.className = "order-item";
+
+                    orderItem.innerHTML = `
+                <h3>Order ID: ${order.order_id}</h3>
+                <p>Status: <span class="status">${order.order_status}</span></p>
+                <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
+                <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
+                <ul>
+                    ${order.OrderItems.map(item => `
+                        <li>
+                            <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
+                            <span>₹${item.price.toFixed(2)}</span>
+                        </li>
+                    `).join("")}
+                </ul>
+            `;
+
+                    deliveredOrdersList.appendChild(orderItem);
+                });
+            } catch (error) {
+                console.error("Error fetching delivered orders:", error);
+                // Display a user-friendly error message
+                const deliveredOrdersList = document.getElementById("delivered-orders-list");
+                deliveredOrdersList.innerHTML = `
+            <div class="error-message">
+                <p>Failed to fetch delivered orders. Please try again later.</p>
+            </div>
+        `;
+            }
+        }
+
+        // Show delivered orders section based on user role
+        function showDeliveredOrdersSection() {
+            const role = sessionStorage.getItem("role");
+            if (role === 'canteen_staff' || role === 'student'||role==='admin') {
+                document.getElementById("deliveredOrdersSection").style.display = "block";
+                fetchDeliveredOrders(); // Fetch delivered orders when the section is shown
+            }
+        }
+
+        // Call this function when the page loads
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     showOrdersSection(); // Show current orders
+        //     showReadyOrdersSection(); // Show ready orders
+        //     showDeliveredOrdersSection(); // Show delivered orders
+        // });
+
+        // // Call this function when the page loads
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     showOrdersSection(); // Show current orders
+        //     showReadyOrdersSection(); // Show ready orders
+        // });
+
+        // Initialize on page load
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     checkUserRole();
+        //     fetchMenu();
+        //     if (sessionStorage.getItem("role") !== 'canteen_staff') {
+        //         fetchCartItems(); // Fetch cart items for non-canteen staff
+        //     }
+        //     showOrdersSection(); // Show orders section
+        // });
+
+        // Initialize on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            checkUserRole();
+            fetchMenu();
+            if (sessionStorage.getItem("role") !== 'canteen_staff') {
+                fetchCartItems(); // Fetch cart items for non-canteen staff
+            }
+            showOrdersSection(); // Show orders section
+            showReadyOrdersSection(); // Show ready orders
+            showDeliveredOrdersSection(); // Show delivered orders
+        });
+
+    </script>
+</body>
+
+</html>

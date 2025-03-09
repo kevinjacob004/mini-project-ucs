@@ -25,6 +25,8 @@ const Counselling = sequelize.define("Counselling", {
 Counselling.associate = (models) => {
   Counselling.belongsTo(models.User, { foreignKey: "student_id", as: "Student" });
   Counselling.belongsTo(models.User, { foreignKey: "counsellor_id", as: "Counsellor" });
+  Counselling.hasMany(models.CounsellingReport, { foreignKey: "counselling_id" });
+
 };
 
 module.exports = Counselling;

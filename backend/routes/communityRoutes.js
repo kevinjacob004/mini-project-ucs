@@ -223,50 +223,109 @@ router.get("/threads/:thread_id/comments", async (req, res) => {
 
 
 
+// router.delete("/threads/:thread_id", authenticateToken, async (req, res) => {
+//   try {
+//       const { thread_id } = req.params;
+//       const user_id = req.user.id;
+//       const user = req.user; // Assuming user details are attached to the request
+
+//       const thread = await Thread.findOne({ where: { thread_id } });
+//       if (!thread) return res.status(404).json({ error: "Thread not found" });
+
+//       if (thread.user_id !== user_id) return res.status(403).json({ error: "Unauthorized" });
+
+//       // 🔹 Delete all associated comments first
+//       await Message.destroy({ where: { thread_id } });
+
+//       // 🔹 Delete the thread
+//       await thread.destroy();
+
+//       res.json({ message: "Thread and all comments deleted successfully" });
+
+//   } catch (error) {
+//       console.error("Error deleting thread:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+
+
+// router.delete("/messages/:message_id", authenticateToken, async (req, res) => {
+//   try {
+//       const { message_id } = req.params;
+//       const user_id = req.user.id;
+
+//       const message = await Message.findOne({ where: { message_id } });
+//       if (!message) return res.status(404).json({ error: "Message not found" });
+
+//       if (message.user_id !== user_id) return res.status(403).json({ error: "Unauthorized" });
+
+//       // 🔹 Delete the message
+//       await message.destroy();
+
+//       res.json({ message: "Comment deleted successfully" });
+
+//   } catch (error) {
+//       console.error("Error deleting message:", error);
+//       res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
 router.delete("/threads/:thread_id", authenticateToken, async (req, res) => {
   try {
-      const { thread_id } = req.params;
-      const user_id = req.user.id;
+    const { thread_id } = req.params;
+    const user_id = req.user.id;
+    const user_role = req.headers.role;
 
-      const thread = await Thread.findOne({ where: { thread_id } });
-      if (!thread) return res.status(404).json({ error: "Thread not found" });
+    const thread = await Thread.findOne({ where: { thread_id } });
+    if (!thread) return res.status(404).json({ error: "Thread not found" });
 
-      if (thread.user_id !== user_id) return res.status(403).json({ error: "Unauthorized" });
+    // Allow deletion if the user is the author OR an admin
+    if (thread.user_id !== user_id && user_role !== "admin") {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
 
-      // 🔹 Delete all associated comments first
-      await Message.destroy({ where: { thread_id } });
+    // 🔹 Delete all associated comments first
+    await Message.destroy({ where: { thread_id } });
 
-      // 🔹 Delete the thread
-      await thread.destroy();
+    // 🔹 Delete the thread
+    await thread.destroy();
 
-      res.json({ message: "Thread and all comments deleted successfully" });
+    res.json({ message: "Thread and all comments deleted successfully" });
 
   } catch (error) {
-      console.error("Error deleting thread:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    consol.log(error);
+    console.error("Error deleting thread:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
 
-
 router.delete("/messages/:message_id", authenticateToken, async (req, res) => {
   try {
-      const { message_id } = req.params;
-      const user_id = req.user.id;
+    const { message_id } = req.params;
+    const user_id = req.user.id;
+    const user=req.user;
+    const user_role = req.headers.role;    
+    console.log(user_role);
+    console.log("Decoded User:", user);
 
-      const message = await Message.findOne({ where: { message_id } });
-      if (!message) return res.status(404).json({ error: "Message not found" });
+    const message = await Message.findOne({ where: { message_id } });
+    if (!message) return res.status(404).json({ error: "Message not found" });
 
-      if (message.user_id !== user_id) return res.status(403).json({ error: "Unauthorized" });
+    // Allow deletion if the user is the author OR an admin
+    if (message.user_id !== user_id && user_role !== "admin") {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
 
-      // 🔹 Delete the message
-      await message.destroy();
+    // 🔹 Delete the message
+    await message.destroy();
 
-      res.json({ message: "Comment deleted successfully" });
+    res.json({ message: "Comment deleted successfully" });
 
   } catch (error) {
-      console.error("Error deleting message:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error deleting message:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

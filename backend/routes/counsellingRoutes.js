@@ -324,7 +324,76 @@ router.put("/add-feedback/:session_id", async (req, res) => {
 //     }
 // });
 
+router.delete("/cancel-slot/:sessionId", authenticateToken, async (req, res) => {
+    const { sessionId } = req.params;
+    const userId = req.user.id; // Assuming the user ID is available in the token
 
+    try {
+        const { sessionId } = req.params;
+        const slot = await Counselling.findOne({ where: { session_id: sessionId, student_id: userId } });
+        if (!slot) {
+            return res.status(404).json({ error: "Slot not found" });
+        }
+
+        // Check if a remark exists
+        if (slot.remark) {
+            return res.status(403).json({ error: "Cannot cancel a slot with a remark" });
+        }
+
+        // 🔹 Delete all associated reports first
+        await CounsellingReport.destroy({
+            where: { counselling_id: sessionId }, // Use the correct column name
+        });
+
+        // Delete the slot
+        await slot.destroy();
+
+        res.json({ message: "Slot cancelled successfully" });
+    } catch (error) {
+        console.error("Error cancelling slot:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// router.get("/admin-booked-slots", authenticateToken, async (req, res) => {
+//     try {
+//         const slots = await CounsellingSession.findAll({
+//             include: [
+//                 { model: User, as: "Student" },
+//                 { model: User, as: "Counsellor" },
+//             ],
+//         });
+
+//         res.json(slots);
+//     } catch (error) {
+//         console.error("Error fetching admin booked slots:", error);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
+
+router.get("/all-booked-slots", authenticateToken, async (req, res) => {
+    try {
+        const role = req.headers.role;    
+        console.log(role);
+        if (role !== "admin") {
+            return res.status(403).json({ error: "Unauthorized access" });
+        }
+
+        const slots = await Counselling.findAll({
+            include: [
+                { model: User, as: "Student", attributes: ["id", "first_name", "last_name"] },
+                { model: User, as: "Counsellor", attributes: ["id", "first_name", "last_name"] },
+                
+            ],
+            order: [["session_date_time", "ASC"]],
+        });
+
+        res.json(slots);
+    } catch (error) {
+        console.error("Error fetching all booked slots:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 
 module.exports = router;
