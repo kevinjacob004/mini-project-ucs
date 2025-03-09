@@ -654,7 +654,7 @@
                 const errorMessage = document.getElementById("errorMessage");
 
                 // Check if the selected date is a Saturday or Sunday
-                if (dayOfWeek === 0 || dayOfWeek === 1) {
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
                     errorMessage.textContent = "Saturdays and Sundays are not allowed. Please select another date.";
                     datePicker.value = ""; // Reset the date picker
                 }
@@ -1274,11 +1274,34 @@
         }
 
         // Function to cancel a slot
+        // async function cancelSlot(sessionId) {
+        //     if (!confirm("Are you sure you want to cancel this slot?")) return;
+
+        //     try {
+        //         const response = await fetch(`https://unified-campus-system.onrender.com/api/counselling/cancel-slot/${sessionId}`, {
+        //             method: "DELETE",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //                 "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+        //             },
+        //         });
+
+        //         if (!response.ok) {
+        //             throw new Error("Failed to cancel slot");
+        //         }
+
+        //         alert("Slot cancelled successfully!");
+        //         fetchStudentBookedSlots(); // Refresh the list of booked slots
+        //     } catch (error) {
+        //         console.error("Error cancelling slot:", error);
+        //         alert("Failed to cancel slot. Please try again.");
+        //     }
+        // }
         async function cancelSlot(sessionId) {
             if (!confirm("Are you sure you want to cancel this slot?")) return;
 
             try {
-                const response = await fetch(`https://unified-campus-system.onrender.com/api/counselling/cancel-slot/${sessionId}`, {
+                const response = await fetch(`http://localhost:5000/api/counselling/cancel-slot/${sessionId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -1287,16 +1310,18 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to cancel slot");
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to cancel slot");
                 }
 
                 alert("Slot cancelled successfully!");
                 fetchStudentBookedSlots(); // Refresh the list of booked slots
             } catch (error) {
                 console.error("Error cancelling slot:", error);
-                alert("Failed to cancel slot. Please try again.");
+                alert(error.message || "Failed to cancel slot. Please try again.");
             }
         }
+
         async function submitFeedback(sessionId) {
             const feedbackText = document.getElementById(`feedback-${sessionId}`).value.trim();
             if (!feedbackText) return alert("Feedback cannot be empty!");

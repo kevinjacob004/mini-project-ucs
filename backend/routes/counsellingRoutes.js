@@ -324,12 +324,44 @@ router.put("/add-feedback/:session_id", async (req, res) => {
 //     }
 // });
 
+// router.delete("/cancel-slot/:sessionId", authenticateToken, async (req, res) => {
+//     const { sessionId } = req.params;
+//     const userId = req.user.id; // Assuming the user ID is available in the token
+
+//     try {
+//         const { sessionId } = req.params;
+//         const slot = await Counselling.findOne({ where: { session_id: sessionId, student_id: userId } });
+//         if (!slot) {
+//             return res.status(404).json({ error: "Slot not found" });
+//         }
+
+//         // Check if a remark exists
+//         if (slot.remark) {
+//             return res.status(403).json({ error: "Cannot cancel a slot with a remark" });
+//         }
+
+//         // 🔹 Delete all associated reports first
+//         await CounsellingReport.destroy({
+//             where: { counselling_id: sessionId }, // Use the correct column name
+//         });
+
+//         // Delete the slot
+//         await slot.destroy();
+
+//         res.json({ message: "Slot cancelled successfully" });
+//     } catch (error) {
+//         console.error("Error cancelling slot:", error);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
+
+
+
 router.delete("/cancel-slot/:sessionId", authenticateToken, async (req, res) => {
     const { sessionId } = req.params;
     const userId = req.user.id; // Assuming the user ID is available in the token
 
     try {
-        const { sessionId } = req.params;
         const slot = await Counselling.findOne({ where: { session_id: sessionId, student_id: userId } });
         if (!slot) {
             return res.status(404).json({ error: "Slot not found" });
@@ -340,7 +372,21 @@ router.delete("/cancel-slot/:sessionId", authenticateToken, async (req, res) => 
             return res.status(403).json({ error: "Cannot cancel a slot with a remark" });
         }
 
-        // 🔹 Delete all associated reports first
+        // Check if the session time has passed
+        const currentTime = new Date();
+        // currentTime.setHours(currentTime.getHours() + 20);
+        // currentTime.setMinutes(currentTime.getMinutes() + 0);
+
+        console.log(currentTime);
+        const sessionTime = new Date(slot.session_date_time);
+        console.log(sessionTime);
+        if (sessionTime < currentTime) {
+            return res.status(403).json({ error: "Cannot cancel a slot that has already passed" });
+        }
+        
+
+
+        // Delete all associated reports first
         await CounsellingReport.destroy({
             where: { counselling_id: sessionId }, // Use the correct column name
         });
@@ -354,6 +400,7 @@ router.delete("/cancel-slot/:sessionId", authenticateToken, async (req, res) => 
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 // router.get("/admin-booked-slots", authenticateToken, async (req, res) => {
 //     try {
