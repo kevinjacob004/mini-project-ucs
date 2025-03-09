@@ -332,7 +332,7 @@ router.post('/order/place', async (req, res) => {
             menuItem.quantity -= orderItem.quantity;
 
             // Ensure the quantity does not go below zero
-            if (menuItem.quantity <= 0) {
+            if (menuItem.quantity < 0) {
                 return res.status(400).json({ error: `Insufficient quantity for item: ${menuItem.item_name}` });
             }
 
