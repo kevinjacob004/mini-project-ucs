@@ -1173,8 +1173,12 @@
                 <p>Description: ${item.item_description}</p>
                 <p>Price: ₹${item.price}</p>
                 <p>Available: ${item.available_from} - ${item.available_to}</p>
-                <p>Quantity: ${item.quantity}</p>
             `;
+
+            if (role === 'canteen_staff'||role==='admin') {
+                menuItem.innerHTML += `<p>Quantity: ${item.quantity}</p>`;
+            }
+
 
                     // Add edit functionality for canteen_staff
                     if (role === 'canteen_staff'||role==='admin') {
