@@ -164,6 +164,8 @@ router.post('/menu', authenticateToken, async (req, res) => {
             available_to
         });
 
+        const io = req.app.get("io");
+        io.emit("newMenuItem", newItem);
         // Return the newly created item
         res.status(201).json(newItem);
     } catch (error) {
@@ -343,6 +345,8 @@ router.post('/order/place', async (req, res) => {
         // Update order status to 'placed'
         order.order_status = 'placed';
         await order.save();
+        const io = req.app.get("io");
+        io.emit("orderPlaced", order);
 
         res.status(200).json({ message: 'Order placed successfully', order });
     } catch (error) {
@@ -485,11 +489,53 @@ router.get('/orders', authenticateToken, async (req, res) => {
     }
 });
 
+// router.put('/orders/:orderId/cancel', authenticateToken, async (req, res) => {
+//     const { orderId } = req.params; // Get the order ID from the URL
+//     const user_id = req.user.id; // Get the user ID from the token
+//     const role = req.headers.role;
+//     // console.log(user_id);
+//     try {
+//         // Find the order
+//         const order = await Order.findOne({
+//             where: { order_id: orderId, user_id } // Ensure the order belongs to the user
+//         });
+
+//         if (role === 'admin') {
+//             const ordadmin = await Order.findOne({
+//                 where: { order_id: orderId } // Ensure the order belongs to the user
+//             });
+//             console.log(ordadmin);
+//             if (!ordadmin) {
+//                 console.log(role);
+//                 return res.status(404).json({ error: 'Order not found or you do not have permission to cancel this order' });
+//             }
+//             ordadmin.order_status = 'cancelled';
+//             await ordadmin.save();
+
+//             res.status(200).json({ message: 'Order cancelled successfully', ordadmin });
+//             return;
+//         }
+
+//         if (!order) {
+//             return res.status(404).json({ error: 'Order not found or you do not have permission to cancel this order' });
+//         }
+
+//         // Update the order status to 'cancelled'
+//         order.order_status = 'cancelled';
+//         await order.save();
+
+//         res.status(200).json({ message: 'Order cancelled successfully', order });
+//     } catch (error) {
+//         console.error('Error cancelling order:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
+
 router.put('/orders/:orderId/cancel', authenticateToken, async (req, res) => {
     const { orderId } = req.params; // Get the order ID from the URL
     const user_id = req.user.id; // Get the user ID from the token
     const role = req.headers.role;
-    // console.log(user_id);
+
     try {
         // Find the order
         const order = await Order.findOne({
@@ -498,34 +544,68 @@ router.put('/orders/:orderId/cancel', authenticateToken, async (req, res) => {
 
         if (role === 'admin') {
             const ordadmin = await Order.findOne({
-                where: { order_id: orderId } // Ensure the order belongs to the user
+                where: { order_id: orderId }
             });
-            console.log(ordadmin);
+
             if (!ordadmin) {
-                console.log(role);
                 return res.status(404).json({ error: 'Order not found or you do not have permission to cancel this order' });
             }
+
+            // Fetch order items to restore quantities
+            const orderItems = await OrderItems.findAll({
+                where: { order_id: orderId }
+            });
+
+            // Restore item quantities in MenuItems
+            for (const item of orderItems) {
+                await MenuItem.increment(
+                    { quantity: item.quantity },
+                    { where: { menu_id: item.item_id } }
+                );
+            }
+
+            // Update order status
             ordadmin.order_status = 'cancelled';
             await ordadmin.save();
 
-            res.status(200).json({ message: 'Order cancelled successfully', ordadmin });
-            return;
+            const io = req.app.get("io");
+            io.emit("cancelOrder", ordadmin);
+
+            return res.status(200).json({ message: 'Order cancelled successfully', ordadmin });
         }
 
         if (!order) {
             return res.status(404).json({ error: 'Order not found or you do not have permission to cancel this order' });
         }
 
-        // Update the order status to 'cancelled'
+        // Fetch order items to restore quantities
+        const orderItems = await OrderItems.findAll({
+            where: { order_id: orderId }
+        });
+
+        // Restore item quantities in MenuItems
+        for (const item of orderItems) {
+            await MenuItem.increment(
+                { quantity: item.quantity },
+                { where: { menu_id: item.item_id } }
+            );
+        }
+
+        // Update order status
         order.order_status = 'cancelled';
         await order.save();
+        const io = req.app.get("io");
+        io.emit("cancelOrder", order);
 
         res.status(200).json({ message: 'Order cancelled successfully', order });
+
     } catch (error) {
         console.error('Error cancelling order:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
 
 router.put('/orders/:orderId/ready', authenticateToken, async (req, res) => {
     const { orderId } = req.params;
@@ -548,6 +628,8 @@ router.put('/orders/:orderId/ready', authenticateToken, async (req, res) => {
         // Update the order status to 'ready'
         order.order_status = 'ready';
         await order.save();
+        const io = req.app.get("io");
+        io.emit("orderStatusUpdated", order);
 
         res.status(200).json({ message: 'Order marked as ready', order });
     } catch (error) {
@@ -630,6 +712,8 @@ router.put('/orders/:orderId/delivered', authenticateToken, async (req, res) => 
         // Update the order status to 'delivered'
         order.order_status = 'delivered';
         await order.save();
+        const io = req.app.get("io");
+        io.emit("orderStatusUpdated", order);
 
         res.status(200).json({ message: 'Order marked as delivered', order });
     } catch (error) {
@@ -690,12 +774,14 @@ router.get('/orders/delivered', authenticateToken, async (req, res) => {
 
 router.put('/menu/:menuId', authenticateToken, async (req, res) => {
     const { menuId } = req.params;
-    const { price, quantity } = req.body;
+    const { price, quantity, avail_from, avail_to } = req.body;
+    // console.log(avail_from);
+    // console.log(avail_to);
     const role = req.headers.role;
-    console.log(role);
+    // console.log(role);
     try {
         // Only canteen_staff can update menu items
-        if (role !== 'canteen_staff') {
+        if (role !== 'canteen_staff' && role !== 'admin') {
             return res.status(403).json({ error: 'You do not have permission to perform this action' });
         }
 
@@ -708,7 +794,12 @@ router.put('/menu/:menuId', authenticateToken, async (req, res) => {
         // Update the menu item
         menuItem.price = price;
         menuItem.quantity = quantity;
+        menuItem.available_from = avail_from;
+        menuItem.available_to = avail_to;
+
         await menuItem.save();
+        const io = req.app.get("io");
+        io.emit("menuItemUpdated", menuItem);
 
         res.status(200).json({ message: 'Menu item updated successfully', menuItem });
     } catch (error) {

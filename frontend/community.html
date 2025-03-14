@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Community - Unified Campus System</title>
   <link rel="shortcut icon" href="1.png" type="image/x-icon">
+  <!-- Add Socket.IO client library -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <style>
     body {
       background-image: url("giphy1.gif");
@@ -176,16 +178,16 @@
 
       <!-- Admin View (Only visible to admins) -->
       <!-- <div id="adminView" style="display: none;"> -->
-        <!-- <h2>Admin Dashboard</h2> -->
-        <!-- Post Input Box -->
-        <!-- <section class="post-box"> -->
-          <!-- <input type="text" id="post-title" placeholder="Enter a title for your post..." /> -->
-          <!-- <textarea id="post-content" placeholder="Share something with the community..."></textarea> -->
-          <!-- <button class="post-btn">Post</button> -->
-        <!-- </section> -->
-        <!-- <section class="post-feed" id="post-feed"> -->
-          <!-- Posts will be dynamically inserted here -->
-        <!-- </section> -->
+      <!-- <h2>Admin Dashboard</h2> -->
+      <!-- Post Input Box -->
+      <!-- <section class="post-box"> -->
+      <!-- <input type="text" id="post-title" placeholder="Enter a title for your post..." /> -->
+      <!-- <textarea id="post-content" placeholder="Share something with the community..."></textarea> -->
+      <!-- <button class="post-btn">Post</button> -->
+      <!-- </section> -->
+      <!-- <section class="post-feed" id="post-feed"> -->
+      <!-- Posts will be dynamically inserted here -->
+      <!-- </section> -->
       <!-- </div> -->
 
       <!-- Regular User View -->
@@ -205,13 +207,32 @@
   </div>
 
   <script>
+    // Initialize Socket.IO
+    const socket = io("https://unified-campus-system.onrender.com");
+    // Socket.IO event listeners for real-time updates
+    socket.on("newPost", (post) => {
+      fetchPosts(); // Refresh posts when a new post is created
+    });
+
+    socket.on("newComment", (comment) => {
+      fetchComments(comment.thread_id); // Refresh comments when a new comment is added
+    });
+
+    socket.on("deletePost", (thread_id) => {
+      fetchPosts(); // Refresh posts when a post is deleted
+    });
+
+    socket.on("deleteComment", (message_id) => {
+      fetchPosts(); // Refresh posts when a comment is deleted
+    });
+
 
     // Check user role and display admin view if applicable
     function checkUserRole() {
       const role = sessionStorage.getItem("role");
       console.log(role);
       if (role === "admin") {
-       // document.getElementById("adminView").style.display = "block";
+        // document.getElementById("adminView").style.display = "block";
         document.getElementById("userView").style.display = "block"; // Hide regular user view
         fetchPosts(); // Fetch posts for admin view
       } else {
@@ -429,7 +450,7 @@
 
     async function fetchComments(thread_id) {
       try {
-        const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}/comments`);
+        const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}/messages`);
         if (!response.ok) {
           throw new Error("Failed to fetch comments");
         }
@@ -440,7 +461,7 @@
         commentsContainer.innerHTML = "";
 
         comments.forEach((comment) => {
-          const deleteCommentButton = userRole === "admin" ||comment.user_id === parseInt(sessionStorage.getItem("id"))
+          const deleteCommentButton = userRole === "admin" || comment.user_id === parseInt(sessionStorage.getItem("id"))
             ? `<button class="delete-comment-btn" data-comment-id="${comment.message_id}">🗑 Delete</button>`
             : "";
 
@@ -477,16 +498,16 @@
 
     // 🔹 Delete Post
     async function deletePost(thread_id) {
-      
+
 
       if (!confirm("Are you sure you want to delete this post? This will also delete all comments.")) return;
 
       try {
         const token = sessionStorage.getItem("token");
-        const role=sessionStorage.getItem("role");
+        const role = sessionStorage.getItem("role");
         const response = await fetch(`https://unified-campus-system.onrender.com/api/community/threads/${thread_id}`, {
           method: "DELETE",
-          headers: { "Authorization": `Bearer ${token}`,"Role": role }
+          headers: { "Authorization": `Bearer ${token}`, "Role": role }
         });
 
         if (!response.ok) throw new Error("Failed to delete post");
@@ -504,10 +525,10 @@
 
       try {
         const token = sessionStorage.getItem("token");
-        const role=sessionStorage.getItem("role");
+        const role = sessionStorage.getItem("role");
         const response = await fetch(`https://unified-campus-system.onrender.com/api/community/messages/${message_id}`, {
           method: "DELETE",
-          headers: { "Authorization": `Bearer ${token}`,"Role": role }
+          headers: { "Authorization": `Bearer ${token}`, "Role": role }
         });
 
         if (!response.ok) throw new Error("Failed to delete comment");

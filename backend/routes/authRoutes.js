@@ -10,6 +10,97 @@ const authenticateToken = require("../middleware/auth");
 const router = express.Router();
 const SECRET_KEY = "my_super_secret_key_12345"; // Change this in production
 
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+
+// Temporary storage for OTPs
+const otpStorage = new Map();
+
+// 🔹 Configure email transporter (Replace with your SMTP details)
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "kevin.jacob@rnpodarschool.com", // 🔹 Replace with your email
+        pass: "ptsp slgu ykgn daqq" // 🔹 Generate App Password in Google Security
+    },
+});
+
+// 🔹 Step 1: Check username & email and send OTP
+router.post("/forgot-password", async (req, res) => {
+    try {
+        const { email, username } = req.body;
+
+        // ✅ Check if user exists
+        const user = await User.findOne({ where: { email, username } });
+        if (!user) {
+            return res.status(404).json({ error: "No account found with this email and username" });
+        }
+
+        // ✅ Generate OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        otpStorage.set(email, otp); // Store OTP temporarily
+
+        // ✅ Send OTP via email
+        await transporter.sendMail({
+            from: '"UCS Support" kevin.jacob@rnpodarschool.com',
+            to: email,
+            subject: "Password Reset Verification Code",
+            text: `Your verification code is: ${otp}`,
+        });
+
+        res.json({ message: "Verification code sent to your email!" });
+    } catch (error) {
+        console.error("Error in forgot password:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// 🔹 Step 2: Verify OTP
+router.post("/verify-otp", async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        // ✅ Check if OTP matches
+        if (otpStorage.get(email) !== otp) {
+            return res.status(400).json({ error: "Invalid OTP or OTP expired" });
+        }
+
+        // ✅ OTP is correct → Allow password reset
+        otpStorage.delete(email); // Remove OTP after use
+        res.json({ message: "OTP verified successfully!" });
+    } catch (error) {
+        console.error("Error in verifying OTP:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// 🔹 Step 3: Reset Password
+router.post("/reset-password", async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        // ✅ Find the user
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        // ✅ Hash the new password (if hashing is used in your project)
+        user.password = hashedPassword; // Ideally, hash before saving
+        await user.save();
+        
+
+        res.json({ message: "Password reset successful!" });
+    } catch (error) {
+        console.error("Error in resetting password:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+
+
 // User Registration Route
 router.post("/register", async (req, res) => {
     try {
