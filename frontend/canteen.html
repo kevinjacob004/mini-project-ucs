@@ -1895,7 +1895,7 @@
         // Show orders section based on user role
         function showOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
                 document.getElementById("ordersSection").style.display = "block";
                 fetchOrders(); // Fetch orders when the section is shown
             }
@@ -2057,7 +2057,7 @@
         // Show ready orders section based on user role
         function showReadyOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
                 document.getElementById("readyOrdersSection").style.display = "block";
                 fetchReadyOrders(); // Fetch ready orders when the section is shown
             }
@@ -2126,7 +2126,7 @@
         // Show delivered orders section based on user role
         function showDeliveredOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
                 document.getElementById("deliveredOrdersSection").style.display = "block";
                 fetchDeliveredOrders(); // Fetch delivered orders when the section is shown
             }
