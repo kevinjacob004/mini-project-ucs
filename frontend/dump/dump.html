@@ -532,10 +532,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Community - Unified Campus System</title>
-  <link rel="shortcut icon" href="1.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
   <style>
     body {
-      background-image: url("giphy1.gif");
+      background-image: url("./static/giphy1.gif");
       background-size: cover;
       background-repeat: repeat;
       background-position: center center;
@@ -1166,5 +1166,447 @@
     });
   </script>
 </body>
+
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - Unified Campus System</title>
+    <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
+    <style>
+        body {
+            background-image: url("./static/giphy.gif");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            padding: 40px;
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-container h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .profile-box {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .profile-box div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-box div:last-child {
+            border-bottom: none;
+        }
+
+        .profile-box h3 {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin: 0;
+            flex: 1;
+        }
+
+        .profile-box span {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            flex: 2;
+            text-align: right;
+        }
+
+        button {
+            background: #6e7fdb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #4a63a0;
+        }
+    </style>
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Campus System</h2>
+            <ul>
+                <li>
+                    <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li>
+                    <a href="dash.html"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="canteen.html"><i class="fas fa-utensils"></i> Canteen</a>
+                </li>
+                <li>
+                    <a href="counselling.html"><i class="fas fa-user-md"></i> Counseling</a>
+                </li>
+                <li>
+                    <a href="community.html"><i class="fas fa-users"></i> Community</a>
+                </li>
+                <li>
+                    <a href="index.html" class="logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="profile-container">
+                <h1>Profile</h1>
+                <div class="profile-box">
+                    <div>
+                        <h3>Name:</h3>
+                        <span id="profile-name"></span>
+                    </div>
+                    <div>
+                        <h3>Username:</h3>
+                        <span id="profile-username"></span>
+                    </div>
+                    <div>
+                        <h3>Branch:</h3>
+                        <span id="profile-branch"></span>
+                    </div>
+                    <div>
+                        <h3>Role:</h3>
+                        <span id="profile-role"></span>
+                    </div>
+                    <div>
+                        <h3>Email:</h3>
+                        <span id="profile-email"></span>
+                    </div>
+                    <button onclick="editprofile()">Edit Profile</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function editprofile() {
+            alert("Edit profile functionality to be implemented.");
+        }
+
+        function logout() {
+            sessionStorage.removeItem("username");
+            sessionStorage.removeItem("fname");
+            sessionStorage.removeItem("lname");
+            sessionStorage.removeItem("id");
+            window.location.href = "auth.html";
+        }
+
+        function fetchinfo() {
+            const fname = sessionStorage.getItem("fname");
+            const lname = sessionStorage.getItem("lname");
+            const role = sessionStorage.getItem("role");
+            const id = sessionStorage.getItem("id");
+            const email = sessionStorage.getItem("email");
+            const username = sessionStorage.getItem("username");
+            document.getElementById("profile-name").textContent = `${fname} ${lname}`;
+            document.getElementById("profile-role").textContent = `${role}`;
+            document.getElementById("profile-username").textContent = `${username}`;
+            document.getElementById("profile-email").textContent = `${email}`;
+            if (username && typeof username === 'string') {
+                if (username.includes("CS")) {
+                    document.getElementById("profile-branch").textContent = `Computer Science`;
+                } else if (username.includes("EC")) {
+                    document.getElementById("profile-branch").textContent = `Electronics and Communication`;
+                }
+                else if (username.includes("EI")) {
+                    document.getElementById("profile-branch").textContent = `Electronics & Instramentation`;
+                } else if (username.includes("ME")) {
+                    document.getElementById("profile-branch").textContent = `Mechanical`;
+                } else if (username.includes("CE")) {
+                     document.getElementById("profile-branch").textContent = `Civil`;
+                }
+                else {
+                    // Default case if neither "CS" nor "EC" is found
+                    document.getElementById("profile-branch").textContent = 'Staff';
+                }
+            } else {
+                console.error("Username is not defined or is not a string.");
+            }
+
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchinfo();
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+<!-- dash dump -->
+ <!--<html>
+  <body id="home">
+    <div id="dash">
+      <h1>Hello User!</h1>
+
+     <img src="temp.webp" alt="temp-img"/> 
+    </div>
+    <div>
+      <p>page contents here-----</p>
+    </div>
+  </body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Dashboard</title>
+  <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <style>
+    header {
+      position: fixed;
+    }
+  </style>
+</head>
+
+<body class="dashboard-body">
+  <header>
+    <div class="logo">
+      <!-- <img src="logo.png" alt="College Logo" /> -->
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#facilities">Facilities</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="index.html" class="logout-btn">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="side-bar">
+    <!-- class name changed from sidebar to side-bar -->
+    <aside class="sidebar">
+      <h2>Campus System</h2>
+      <ul>
+        <li>
+          <a href="homepage.html"><i class="fas fa-home"></i> Home</a>
+        </li>
+        <li>
+          <a href="dash.html"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="canteen.html"><i class="fas fa-utensils"></i> Canteen</a>
+        </li>
+        <li>
+          <a href="counselling.html"><i class="fas fa-user-md"></i> Counseling</a>
+        </li>
+        <li>
+          <a href="community.html"><i class="fas fa-users"></i> Community</a>
+        </li>
+        <li>
+          <a href="index.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </aside>
+  </div>
+
+  <!--<div class="sidebar">
+      <ul>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <br />
+        <li><a href="#labs"></a></li>
+        <li><a href="#labs">Canteen</a></li>
+        <li><a href="#labs">Counselling</a></li>
+        <li><a href="#sports">Community</a></li>
+        <li><a href="#canteen">Canteen</a></li>
+        <li><a href="#hostel">Hostel</a></li>
+      </ul>
+    </div>-->
+
+  <div class="main-content">
+    <section id="home">
+      <div class="dashboard-container">
+        <h1>Welcome to the College Dashboard</h1>
+        <p>Your one-stop hub for accessing all college facilities.</p>
+
+        <div class="stats">
+          <div class="stat-card">
+            <h3>Canteen</h3>
+            <p>Access and explore Canteen facilites</p>
+            <a href="canteen.html">Explore</a>
+          </div>
+          <div class="stat-card">
+            <h3>Counselling</h3>
+            <p>Access and explore Counselling facilites</p>
+            <a href="counselling.html">Explore</a>
+          </div>
+          <div class="stat-card">
+            <h3>Community</h3>
+            <p>Access and explore Community facilites</p>
+            <a href="community.html">Explore</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="profile">
+      <div class="profile-container">
+        <div class="profile-card">
+          <!-- <img src="profile-picture.jpg" alt="Profile Picture" /> -->
+          <div class="profile-info">
+            <h3 id="name-of-user"></h3>
+            <p id="branch-user">Student, Computer Science</p>
+            <a href="#edit-profile">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="facilities">
+      <div class="facility-container">
+        <div class="facility-card">
+          <h3>Canteen</h3>
+          <p>Access and explore Canteen facilites</p>
+          <a href="canteen.html">More Info</a>
+        </div>
+        <div class="facility-card">
+          <h3>Counselling</h3>
+          <p>Access and explore Counselling facilites</p>
+          <a href="counselling.html">More Info</a>
+        </div>
+        <div class="facility-card">
+          <h3>Community</h3>
+          <p>Access and explore Community facilites</p>
+          <a href="community.html">More Info</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy;Copyright 2025 FISAT. All rights reserved.</p>
+      <div class="social-icons">
+        <a href="https://fisat.ac.in/" target="https://fisat.ac.in/">Facebook</a>
+        <a href="https://fisat.ac.in/" target="https://fisat.ac.in/">Twitter</a>
+        <a href="https://fisat.ac.in/" target="https://fisat.ac.in/">Instagram</a>
+      </div>
+    </footer>
+  </div>
+</body>
+
+<script>
+  // Retrieve the logged-in user's name from sessionStorage
+  const username = sessionStorage.getItem("username");
+  const fname = sessionStorage.getItem("fname");
+  const role = sessionStorage.getItem("role");
+
+  // Update the welcome message
+  const welcomeMessage = document.getElementById("name-of-user");
+  if (fname) {
+    welcomeMessage.textContent = ` ${fname}`;
+  } else if (username) {
+    welcomeMessage.textContent = `${username}`;
+  } else {
+    welcomeMessage.textContent = "User";
+  }
+
+  const branchuser = document.getElementById("branch-user");
+
+  if (username && typeof username === 'string') {
+    if (username.includes("CS")) {
+      branchuser.textContent = `${role},Computer Science`;
+    } else if (username.includes("EC")) {
+      branchuser.textContent = `${role}, Electronics`;
+    }
+    else if (username.includes("EI")) {
+      branchuser.textContent = `${role}, Electronics & Instramentation`;
+    } else if (username.includes("ME")) {
+      branchuser.textContent = `${role}, Mechanical`;
+    } else if (username.includes("CE")) {
+      branchuser.textContent = `${role}, Civil`;
+    }
+    else {
+      // Default case if neither "CS" nor "EC" is found
+      branchuser.textContent = 'Staff';
+    }
+  } else {
+    console.error("Username is not defined or is not a string.");
+  }
+
+  function logout() {
+    // Clear user information from sessionStorage
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("fname");
+    sessionStorage.removeItem("lname");
+    sessionStorage.removeItem("id");
+
+    // Redirect to the login page
+    window.location.href = "auth.html";
+  }
+</script>
 
 </html>

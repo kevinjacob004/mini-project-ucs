@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Thread, Message, User } = require("../models");
+const { Thread, Message, User, Notification } = require("../models");
 const authenticateToken = require("../middleware/auth");
 
 // ✅ Function to safely get `io`
@@ -81,22 +81,82 @@ router.get("/threads/:thread_id", async (req, res) => {
     }
 });
 
+// //✅ 4️⃣ Create a New Comment (Message)
+// router.post("/messages", authenticateToken, async (req, res) => {
+//     try {
+//         const { thread_id, message_content } = req.body;
+//         if (!thread_id || !message_content) return res.status(400).json({ error: "Thread ID and message content are required" });
+
+//         const user_id = req.user.id;
+//         const newMessage = await Message.create({ thread_id, user_id, message_content });
+
+//         // Emit event for real-time update
+//         const io = getIo(req);
+//         if (io) {
+//             io.emit("newComment", {
+//                 ...newMessage.toJSON(),
+//                 User: { first_name: req.user.first_name, last_name: req.user.last_name },
+//             });
+//         }
+
+//         res.status(201).json(newMessage);
+//     } catch (error) {
+//         console.error("Error creating message:", error);
+//         res.status(500).json({ error: "An error occurred while creating the message" });
+//     }
+// });
+
 // ✅ 4️⃣ Create a New Comment (Message)
 router.post("/messages", authenticateToken, async (req, res) => {
     try {
-        const { thread_id, message_content } = req.body;
-        if (!thread_id || !message_content) return res.status(400).json({ error: "Thread ID and message content are required" });
+        const { thread_id, message_content, name } = req.body;
+        if (!thread_id || !message_content) {
+            return res.status(400).json({ error: "Thread ID and message content are required" });
+        }
 
         const user_id = req.user.id;
         const newMessage = await Message.create({ thread_id, user_id, message_content });
 
-        // Emit event for real-time update
-        const io = getIo(req);
-        if (io) {
+        // 🔹 Fetch the thread to get the original post owner
+        const thread = await Thread.findByPk(thread_id);
+        if (!thread) {
+            return res.status(404).json({ error: "Thread not found" });
+        }
+
+        const postOwner = await User.findByPk(thread.user_id); // Get the user who created the thread
+        if (!postOwner) {
+            return res.status(404).json({ error: "Post owner not found" });
+        }
+        console.log(postOwner);
+        console.log(postOwner.first_name);
+
+        // 🔹 Save Notification in the Database
+        const notification = await Notification.create({
+            userId: postOwner.id, // The owner of the post should receive the notification
+            title: "New Comment on Your Post",
+            body: `${name} commented: "${message_content}"`,
+            isRead: false,
+        });
+
+        if (user_id !== postOwner.id) {
+            // 🔹 Emit Event for Real-Time Notification (Push Notification)
+            const io = getIo(req); // Get the Socket.IO instance
+            if (io) {
+                io.to(`user_${postOwner.id}`).emit("newNotification", {
+                    notification_id: notification.id,
+                    title: notification.title,
+                    body: notification.body,
+                    isRead: notification.isRead,
+                    commenterName: name,
+                });
+            }
+
+            // 🔹 Emit Event for Real-Time Comment Update
             io.emit("newComment", {
                 ...newMessage.toJSON(),
                 User: { first_name: req.user.first_name, last_name: req.user.last_name },
             });
+
         }
 
         res.status(201).json(newMessage);
@@ -105,6 +165,7 @@ router.post("/messages", authenticateToken, async (req, res) => {
         res.status(500).json({ error: "An error occurred while creating the message" });
     }
 });
+
 
 // ✅ 5️⃣ Get All Comments for a Thread
 router.get("/threads/:thread_id/messages", async (req, res) => {

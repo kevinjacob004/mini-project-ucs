@@ -10,11 +10,10 @@ const CounsellingReport = require("./CounsellingReport");
 const MenuItem = require("./Menu");
 const Order = require("./Order");
 const OrderItems = require("./OrderItems");
-
-
+const Notification=require("./Notification");
 
 // Register associations
-User.associate({ Thread, Message, Counselling,Order,CounsellingReport });
+User.associate({ Thread, Message, Counselling,Order,CounsellingReport,});
 Thread.associate({ User, Message });
 Message.associate({ User, Thread });
 Counselling.associate({User,CounsellingReport});
@@ -23,7 +22,8 @@ CounsellingReport.associate({Counselling,User});
 MenuItem.associate({ OrderItems });
 Order.associate({ OrderItems,User });
 OrderItems.associate({ Order, MenuItem });
-
+//Notification.associate({User});
+//UserFCMToken.associate({User});
 
 // Export models
 module.exports = {
@@ -36,5 +36,6 @@ module.exports = {
   MenuItem,
   Order,
   OrderItems,
-
+  Notification,
+  
 };

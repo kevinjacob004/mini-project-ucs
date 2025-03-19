@@ -71,6 +71,7 @@ const counsellingRoutes = require("./routes/counsellingRoutes");
 const counsellingReportRoutes = require("./routes/counsellingReportRoutes");
 const canteenRoutes = require("./routes/canteenRoutes");
 
+
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -139,6 +140,19 @@ io.on("connection", (socket) => {
   socket.on("cancelOrder", (order) => io.emit("cancelOrder", order)); // Order placed
 
 
+  // Assign the user to a room based on their user ID (for targeted notifications)
+  socket.on("join", (userId) => {
+    socket.join(`user_${userId}`);
+  });
+
+  // Handle real-time new comment notification
+  socket.on("newComment", (data) => {
+    io.to(`user_${data.postOwnerId}`).emit("newNotification", {
+      title: "New Comment on Your Post",
+      body: `${data.commenterName} commented: "${data.comment}"`,
+    });
+  });
+
 });
 
 // Middleware
@@ -153,6 +167,7 @@ app.use("/api/counselling", counsellingRoutes);
 app.use("/api/report", counsellingReportRoutes);
 app.use("/api/canteen", canteenRoutes);
 
+
 // Start server after DB connection
 sequelize.authenticate()
   .then(() => {
@@ -165,6 +180,5 @@ sequelize.authenticate()
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
-
 
 module.exports = { io };

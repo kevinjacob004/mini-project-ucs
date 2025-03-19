@@ -1,17 +1,3 @@
-<!--<html>
-  <body id="home">
-    <div id="dash">
-      <h1>Hello User!</h1>
-
-     <img src="temp.webp" alt="temp-img"/> 
-    </div>
-    <div>
-      <p>page contents here-----</p>
-    </div>
-  </body>
-</html>
--->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,10 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>College Dashboard</title>
-  <link rel="shortcut icon" href="1.png" type="image/x-icon">
+  <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Add Socket.IO client library -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
   <style>
     header {
       position: fixed;
@@ -73,21 +62,6 @@
     </aside>
   </div>
 
-  <!--<div class="sidebar">
-      <ul>
-        <li><a href="#"></a></li>
-        <li><a href="#"></a></li>
-        <li><a href="#"></a></li>
-        <br />
-        <li><a href="#labs"></a></li>
-        <li><a href="#labs">Canteen</a></li>
-        <li><a href="#labs">Counselling</a></li>
-        <li><a href="#sports">Community</a></li>
-        <li><a href="#canteen">Canteen</a></li>
-        <li><a href="#hostel">Hostel</a></li>
-      </ul>
-    </div>-->
-
   <div class="main-content">
     <section id="home">
       <div class="dashboard-container">
@@ -117,7 +91,7 @@
     <section id="profile">
       <div class="profile-container">
         <div class="profile-card">
-          <img src="profile-picture.jpg" alt="Profile Picture" />
+          <!-- <img src="profile-picture.jpg" alt="Profile Picture" /> -->
           <div class="profile-info">
             <h3 id="name-of-user"></h3>
             <p id="branch-user">Student, Computer Science</p>
@@ -199,14 +173,61 @@
 
   function logout() {
     // Clear user information from sessionStorage
+    sessionStorage.removeItem("token");
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("fname");
     sessionStorage.removeItem("lname");
     sessionStorage.removeItem("id");
-
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("email");
     // Redirect to the login page
     window.location.href = "auth.html";
   }
+
+  // Handle logout
+  document.querySelector(".logout").addEventListener("click", () => {
+    // Clear sessionStorage
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("fname");
+    sessionStorage.removeItem("lname");
+    sessionStorage.removeItem("id");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("email");
+
+    // Redirect to the login page
+    window.location.href = "auth.html";
+  });
+
+  const socket = io("https://unified-campus-system.onrender.com");
+  const userId = sessionStorage.getItem("id"); // Assuming you store the user ID in localStorage
+  console.log(userId);
+  if (userId) {
+    socket.emit("join", userId);
+  }
+
+  // Listen for new notifications
+  socket.on("newNotification", (notification) => {
+    showNotification(notification.title, notification.body);
+  });
+
+  // Function to show the notification as a pop-up
+  function showNotification(title, message) {
+    // Create a notification pop-up (if browser supports Notification API)
+    if (Notification.permission === "granted") {
+      new Notification(title, { body: message });
+    }
+    else {
+      // If Notification API is not supported or permission is denied, use an alert
+      alert(`${title}: ${message}`);
+    }
+  }
+
+  // Request permission for browser notifications
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+
 </script>
 
 </html>

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <link rel="shortcut icon" href="1.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
     <style>
         /* Your existing CSS styles */
         body {
-            background-image: url("giphy1.gif");
+            background-image: url("./static/giphy1.gif");
             font-family: 'Roboto', sans-serif;
             background-color: #f4f4f9;
             margin: 0;
@@ -79,7 +79,7 @@
         }
 
         .main-content {
-            /* background-image: url("giphy1.gif"); */
+            /* background-image: url("./static/giphy1.gif"); */
             margin-left: 250px;
             flex: 1;
             padding: 20px;
@@ -171,41 +171,6 @@
             color: #721c24;
         }
 
-        /* .menu-container,
-        .cart-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .menu-item:last-child {
-            border-bottom: none;
-        }
-
-        .menu-item button {
-            background-color: #27ae60;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .menu-item button:hover {
-            background-color: #219150;
-        } */
-
-
         /* Menu Section Styling */
         .menu {
             background-color: white;
@@ -289,21 +254,6 @@
         }
 
 
-        /* .cart-container button {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .cart-container button:hover {
-            background-color: #c0392b;
-        }
 
         /* Cart Item Styling */
         .cart-item {
@@ -782,29 +732,6 @@
             background-color: #f9f9f9;
         }
 
-        /* .edit-form {
-            margin-top: 10px;
-        }
-
-        .edit-form input {
-            padding: 5px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .edit-form button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .edit-form button:hover {
-            background-color: #0056b3;
-        } */
         /* Edit Form Styles */
         .edit-form {
             margin-top: 15px;
@@ -876,13 +803,6 @@
             <!-- <button class="profile-btn">Profile</button> -->
         </header>
 
-        <!-- Cart Section (Visible only to non-canteen staff) -->
-        <!-- <section class="cart-container" id="cartSection" style="display: none;">
-            <h2>Your Cart</h2>
-            <ul id="cart-items"></ul>
-            <p>Total: ₹<span id="total-price">0.00</span></p>
-            <button onclick="placeOrder()">Place Order</button>
-        </section> -->
         <!-- Cart Section -->
         <section class="cart-container" id="cartSection" style="display: none;">
             <h2>Your Cart</h2>
@@ -896,22 +816,6 @@
                 <button onclick="placeOrder()" class="place-order-btn">Place Order</button>
             </div>
         </section>
-
-        <!-- Add Menu Item Form (Visible only to Canteen Staff) -->
-        <!-- <section id="adminPanel" style="display: none;">
-            <h2>Canteen Staff Panel</h2>
-            <button onclick="toggleAddItemForm()">➕ Add Item</button>
-            <div id="addItemForm" style="display: none;">
-                <h3>Add New Menu Item</h3>
-                <input type="text" id="itemName" placeholder="Item Name" required />
-                <input type="text" id="itemDescription" placeholder="Description" required />
-                <input type="number" id="itemPrice" placeholder="Price" required />
-                <input type="number" id="itemQuantity" placeholder="Quantity" required />
-                <input type="time" id="availableFrom" required />
-                <input type="time" id="availableTo" required />
-                <button onclick="addMenuItem()">Add Item</button>
-            </div>
-        </section> -->
 
         <section id="adminPanel" style="display: none;">
             <h2>Canteen Staff Panel</h2>
@@ -980,6 +884,20 @@
     </div>
 
     <script>
+        // Handle logout
+        document.querySelector(".logout").addEventListener("click", () => {
+            // Clear sessionStorage
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("username");
+            sessionStorage.removeItem("fname");
+            sessionStorage.removeItem("lname");
+            sessionStorage.removeItem("id");
+            sessionStorage.removeItem("role");
+            sessionStorage.removeItem("email");
+
+            // Redirect to the login page
+            window.location.href = "auth.html";
+        });
         const apiUrl = "https://unified-campus-system.onrender.com/api/canteen"; // Adjust based on your backend
         // Initialize Socket.IO
         const socket = io("https://unified-campus-system.onrender.com"); // Replace with your server URL
@@ -998,15 +916,6 @@
             fetchOrders();
         });
 
-        // // Listen for items added to cart
-        // socket.on("itemAddedToCart", (cartItem) => {
-        //     fetchCartItems(); // Refresh the cart
-        // });
-
-        // // Listen for items removed from cart
-        // socket.on("itemRemovedFromCart", (cartItemId) => {
-        //     fetchCartItems(); // Refresh the cart
-        // });
 
         // Listen for new orders
         socket.on("orderPlaced", (order) => {
@@ -1034,151 +943,7 @@
             }
         }
 
-        // Fetch menu items from the backend
-        // async function fetchMenu() {
-        //     try {
-        //         const response = await fetch(`${apiUrl}/fmenu`);
-        //         const menu = await response.json();
-        //         const menuContainer = document.getElementById("menu-items");
-        //         menuContainer.innerHTML = "";
-        //         if (menu.length === 0) {
-        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
-        //             return;
-        //         }
-        //         menu.forEach(item => {
-        //             menuContainer.innerHTML += `
-        //                 <div class="menu-item">
-        //                     <h3>${item.item_name}</h3>
-        //                     <p>${item.item_description}</p>
-        //                     <p>₹${item.price}</p>
-        //                     <p>Available: ${item.available_from} - ${item.available_to}</p>
-        //                     ${sessionStorage.getItem("role") === 'canteen_staff' ? '' : `<button onclick="addToCart(${item.menu_id}, '${item.item_name}', ${item.price})">Add to Cart</button>`}
-        //                 </div>`;
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching menu:", error);
-        //     }
-        // }
 
-
-        // async function fetchMenu() {
-        //     const menuContainer = document.getElementById("menu-items");
-        //     const loadingSpinner = document.getElementById("loading");
-
-        //     try {
-        //         // Show loading spinner
-        //         loadingSpinner.style.display = "flex";
-        //         menuContainer.innerHTML = "";
-
-        //         const response = await fetch(`${apiUrl}/fmenu`);
-        //         const menu = await response.json();
-
-        //         // Hide loading spinner
-        //         loadingSpinner.style.display = "none";
-
-        //         if (menu.length === 0) {
-        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
-        //             return;
-        //         }
-
-        //         menu.forEach(item => {
-        //             const menuItem = document.createElement("div");
-        //             menuItem.className = "menu-item";
-
-        //             menuItem.innerHTML = `
-        //         <h3>${item.item_name}</h3>
-        //         <p>${item.item_description}</p>
-        //         <p>₹${item.price}</p>
-        //         <p>Available: ${item.available_from} - ${item.available_to}</p>
-        //         ${sessionStorage.getItem("role") === 'canteen_staff' ? '' : `<button onclick="addToCart(${item.menu_id}, '${item.item_name}', ${item.price})">Add to Cart</button>`}
-        //     `;
-        //             menuContainer.appendChild(menuItem);
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching menu:", error);
-        //         // Hide loading spinner and show error message
-        //         loadingSpinner.style.display = "none";
-        //         menuContainer.innerHTML = `
-        //     <div class="error-message">
-        //         <p>Failed to fetch menu. Please try again later.</p>
-        //     </div>
-        // `;
-        //     }
-        // }
-        // async function fetchMenu() {
-        //     const menuContainer = document.getElementById("menu-items");
-        //     const loadingSpinner = document.getElementById("loading");
-
-        //     try {
-        //         // Show loading spinner
-        //         loadingSpinner.style.display = "flex";
-        //         menuContainer.innerHTML = "";
-
-        //         const response = await fetch(`${apiUrl}/fmenu`);
-        //         const menu = await response.json();
-
-        //         // Hide loading spinner
-        //         loadingSpinner.style.display = "none";
-
-        //         if (menu.length === 0) {
-        //             menuContainer.innerHTML = "<p>No items available in the menu.</p>";
-        //             return;
-        //         }
-
-        //         const role = sessionStorage.getItem("role");
-
-        //         menu.forEach(item => {
-        //             // For students, only display items with quantity > 0
-        //             if (role === 'student' && item.quantity <= 0) {
-        //                 return; // Skip this item
-        //             }
-
-        //             const menuItem = document.createElement("div");
-        //             menuItem.className = "menu-item";
-
-        //             menuItem.innerHTML = `
-        //         <h3>${item.item_name}</h3>
-        //         <p>${item.item_description}</p>
-        //         <p>₹${item.price}</p>
-        //         <p>Available: ${item.available_from} - ${item.available_to}</p>
-        //         <p>Quantity: ${item.quantity}</p>
-        //     `;
-
-        //             // Add edit functionality for canteen_staff
-        //             if (role === 'canteen_staff') {
-        //                 const editForm = document.createElement("div");
-        //                 editForm.className = "edit-form";
-
-        //                 editForm.innerHTML = `
-        //                 <p>Update Price</p>
-        //             <input type="number" id="price-${item.menu_id}" value="${item.price}" placeholder="Price" />
-        //             <p>Update Quantity</p>
-        //             <input type="number" id="quantity-${item.menu_id}" value="${item.quantity}" placeholder="Quantity" />
-        //             <button onclick="updateMenuItem(${item.menu_id})">Update</button>
-        //         `;
-
-        //                 menuItem.appendChild(editForm);
-        //             } else {
-        //                 // Add to Cart button for students
-        //                 const addToCartButton = document.createElement("button");
-        //                 addToCartButton.textContent = "Add to Cart";
-        //                 addToCartButton.onclick = () => addToCart(item.menu_id, item.item_name, item.price);
-        //                 menuItem.appendChild(addToCartButton);
-        //             }
-
-        //             menuContainer.appendChild(menuItem);
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching menu:", error);
-        //         // Hide loading spinner and show error message
-        //         loadingSpinner.style.display = "none";
-        //         menuContainer.innerHTML = `
-        //     <div class="error-message">
-        //         <p>Failed to fetch menu. Please try again later.</p>
-        //     </div>
-        // `;
-        //     }
-        // }
         async function fetchMenu() {
             const menuContainer = document.getElementById("menu-items");
             const loadingSpinner = document.getElementById("loading");
@@ -1338,87 +1103,6 @@
             }
         }
 
-        // Fetch cart items (for non-canteen staff)
-        // async function fetchCartItems() {
-        //     try {
-        //         const user_id = sessionStorage.getItem("id");
-        //         if (!user_id) return;
-
-        //         const response = await fetch(`${apiUrl}/cart/${user_id}`, {
-        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
-        //         });
-
-        //         if (!response.ok) {
-        //             throw new Error("Failed to fetch cart items");
-        //         }
-
-        //         const cartItems = await response.json();
-        //         const cartContainer = document.getElementById("cart-items");
-        //         const totalPriceElement = document.getElementById("total-price");
-
-        //         cartContainer.innerHTML = "";
-        //         let totalPrice = 0;
-
-        //         cartItems.forEach(item => {
-        //             const cartItemElement = document.createElement("li");
-        //             cartItemElement.innerHTML = `
-        //                 <span>${item.MenuItem.item_name} (Qty: ${item.quantity}) - ₹${item.price * item.quantity}</span>
-        //                 <button onclick="removeFromCart(${item.id})">❌</button>
-        //             `;
-        //             cartContainer.appendChild(cartItemElement);
-        //             totalPrice += item.price * item.quantity;
-        //         });
-
-        //         totalPriceElement.textContent = totalPrice.toFixed(2);
-        //     } catch (error) {
-        //         console.error("Error fetching cart items:", error);
-        //     }
-        // }
-
-        // Fetch cart items
-        // async function fetchCartItems() {
-        //     try {
-        //         const user_id = sessionStorage.getItem("id");
-        //         if (!user_id) return;
-
-        //         const response = await fetch(`${apiUrl}/cart/${user_id}`, {
-        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
-        //         });
-
-        //         if (!response.ok) {
-        //             throw new Error("Failed to fetch cart items");
-        //         }
-
-        //         const cartItems = await response.json();
-        //         const cartContainer = document.getElementById("cart-items");
-        //         const totalPriceElement = document.getElementById("total-price");
-
-        //         cartContainer.innerHTML = "";
-        //         let totalPrice = 0;
-
-        //         cartItems.forEach(item => {
-        //             const cartItemElement = document.createElement("li");
-        //             cartItemElement.className = "cart-item";
-
-        //             cartItemElement.innerHTML = `
-        //         <span>${item.MenuItem.item_name} - ₹${item.price}</span>
-        //         <div class="quantity-controls">
-        //             <button onclick="updateQuantity(${item.id}, 'decrease')" class="decrease">-</button>
-        //             <span>${item.quantity}</span>
-        //             <button onclick="updateQuantity(${item.id}, 'increase')">+</button>
-        //         </div>
-        //         <button onclick="removeFromCart(${item.id})" class="remove-btn">Remove</button>
-        //     `;
-        //             cartContainer.appendChild(cartItemElement);
-        //             totalPrice += item.price;
-        //         });
-
-        //         totalPriceElement.textContent = totalPrice.toFixed(2);
-        //     } catch (error) {
-        //         console.error("Error fetching cart items:", error);
-        //     }
-        // }
-
 
 
         async function fetchCartItems() {
@@ -1479,16 +1163,6 @@
             }
         }
 
-
-
-
-
-
-
-
-
-        // Update quantity of an item in the cart
-        // Update quantity of an item in the cart
         // Update quantity of an item in the cart
         async function updateQuantity(orderItemId, action) {
             try {
@@ -1586,38 +1260,6 @@
             }
         }
 
-        // Add new menu item (for canteen staff)
-        // async function addMenuItem() {
-        //     try {
-        //         const item_name = document.getElementById("itemName").value;
-        //         const item_description = document.getElementById("itemDescription").value;
-        //         const price = document.getElementById("itemPrice").value;
-        //         const quantity = document.getElementById("itemQuantity").value;
-        //         const available_from = document.getElementById("availableFrom").value;
-        //         const available_to = document.getElementById("availableTo").value;
-
-        //         const response = await fetch(`${apiUrl}/menu`, {
-        //             method: "POST",
-        //             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${sessionStorage.getItem("token")}` },
-        //             body: JSON.stringify({ item_name, item_description, price, quantity, available_from, available_to })
-        //         });
-
-        //         if (response.ok) {
-        //             alert("✅ Item added successfully!");
-        //             fetchMenu();
-        //         } else {
-        //             alert("❌ Failed to add item");
-        //         }
-        //     } catch (error) {
-        //         console.error("❌ Error adding menu item:", error);
-        //     }
-        // }
-
-        // // Toggle add item form visibility (for canteen staff)
-        // function toggleAddItemForm() {
-        //     const form = document.getElementById("addItemForm");
-        //     form.style.display = form.style.display === "none" ? "block" : "none";
-        // }
 
         async function addMenuItem() {
             try {
@@ -1668,101 +1310,6 @@
             }, 3000);
         }
 
-        // Fetch orders
-        // async function fetchOrders() {
-        //     try {
-        //         const role = sessionStorage.getItem('role');
-        //         console.log(role);
-        //         const response = await fetch(`${apiUrl}/orders`, {
-        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
-
-        //         });
-
-        //         if (!response.ok) {
-        //             throw new Error("Failed to fetch orders");
-        //         }
-
-        //         const orders = await response.json();
-        //         const ordersList = document.getElementById("orders-list");
-        //         ordersList.innerHTML = "";
-
-        //         if (orders.length === 0) {
-        //             ordersList.innerHTML = "<p>No orders found.</p>";
-        //             return;
-        //         }
-
-        //         orders.forEach(order => {
-        //             const orderItem = document.createElement("li");
-        //             orderItem.className = "order-item";
-
-        //             orderItem.innerHTML = `
-        //         <h3>Order ID: ${order.order_id}</h3>
-        //         <p>Status: ${order.order_status}</p>
-        //         <p>Total Price: ₹${order.total_price.toFixed(2)}</p>
-        //         <p>Ordered by: ${order.User ? order.User.first_name : order.user_id}</p>
-        //         <ul>
-        //             ${order.OrderItems.map(item => `
-        //                 <li>
-        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
-        //                     <span>₹${item.price.toFixed(2)}</span>
-        //                 </li>
-        //             `).join("")}
-        //         </ul>
-        //     `;
-        //             ordersList.appendChild(orderItem);
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching orders:", error);
-        //         alert("Failed to fetch orders.");
-        //     }
-        // }
-
-        // Fetch orders
-        // async function fetchOrders() {
-        //     try {
-        //         const role = sessionStorage.getItem('role');
-        //         const response = await fetch(`${apiUrl}/orders`, {
-        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
-        //         });
-
-        //         if (!response.ok) {
-        //             throw new Error("Failed to fetch orders");
-        //         }
-
-        //         const orders = await response.json();
-        //         const ordersList = document.getElementById("orders-list");
-        //         ordersList.innerHTML = "";
-
-        //         if (orders.length === 0) {
-        //             ordersList.innerHTML = "<p>No orders found.</p>";
-        //             return;
-        //         }
-
-        //         orders.forEach(order => {
-        //             const orderItem = document.createElement("li");
-        //             orderItem.className = "order-item";
-
-        //             orderItem.innerHTML = `
-        //         <h3>Order ID: ${order.order_id}</h3>
-        //         <p>Status: <span class="status">${order.order_status}</span></p>
-        //         <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
-        //         <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
-        //         <ul>
-        //             ${order.OrderItems.map(item => `
-        //                 <li>
-        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
-        //                     <span>₹${item.price.toFixed(2)}</span>
-        //                 </li>
-        //             `).join("")}
-        //         </ul>
-        //     `;
-        //             ordersList.appendChild(orderItem);
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching orders:", error);
-        //         alert("Failed to fetch orders.");
-        //     }
-        // }
         // Fetch orders
         async function fetchOrders() {
             try {
@@ -1895,71 +1442,11 @@
         // Show orders section based on user role
         function showOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin' || role === 'counselor') {
                 document.getElementById("ordersSection").style.display = "block";
                 fetchOrders(); // Fetch orders when the section is shown
             }
         }
-
-        // Fetch and display ready orders
-        // async function fetchReadyOrders() {
-        //     try {
-        //         const role = sessionStorage.getItem('role');
-        //         const response = await fetch(`${apiUrl}/orders/ready`, {
-        //             headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}`, "Role": role }
-        //         });
-
-        //         if (!response.ok) {
-        //             throw new Error("Failed to fetch ready orders");
-        //         }
-
-        //         const readyOrders = await response.json();
-        //         const readyOrdersList = document.getElementById("ready-orders-list");
-        //         readyOrdersList.innerHTML = "";
-
-        //         if (readyOrders.length === 0) {
-        //             // Display a friendly message if no ready orders are found
-        //             readyOrdersList.innerHTML = `
-        //         <div class="no-orders">
-        //             <p>No ready orders found.</p>
-        //         </div>
-        //     `;
-        //             return;
-        //         }
-
-        //         // Render the ready orders
-        //         readyOrders.forEach(order => {
-        //             const orderItem = document.createElement("li");
-        //             orderItem.className = "order-item";
-
-        //             orderItem.innerHTML = `
-        //         <h3>Order ID: ${order.order_id}</h3>
-        //         <p>Status: <span class="status">${order.order_status}</span></p>
-        //         <p>Total Price: ₹<span class="total-price">${order.total_price.toFixed(2)}</span></p>
-        //         <p>Ordered by: <span class="user-name">${order.User ? order.User.first_name : order.user_id}</span></p>
-        //         <ul>
-        //             ${order.OrderItems.map(item => `
-        //                 <li>
-        //                     <span>${item.MenuItem.item_name} (Qty: ${item.quantity})</span>
-        //                     <span>₹${item.price.toFixed(2)}</span>
-        //                 </li>
-        //             `).join("")}
-        //         </ul>
-        //     `;
-
-        //             readyOrdersList.appendChild(orderItem);
-        //         });
-        //     } catch (error) {
-        //         console.error("Error fetching ready orders:", error);
-        //         // Display a user-friendly error message
-        //         const readyOrdersList = document.getElementById("ready-orders-list");
-        //         readyOrdersList.innerHTML = `
-        //     <div class="error-message">
-        //         <p>Failed to fetch ready orders. Please try again later.</p>
-        //     </div>
-        // `;
-        //     }
-        // }
 
         async function fetchReadyOrders() {
             try {
@@ -2057,7 +1544,7 @@
         // Show ready orders section based on user role
         function showReadyOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin' || role === 'counselor') {
                 document.getElementById("readyOrdersSection").style.display = "block";
                 fetchReadyOrders(); // Fetch ready orders when the section is shown
             }
@@ -2126,46 +1613,60 @@
         // Show delivered orders section based on user role
         function showDeliveredOrdersSection() {
             const role = sessionStorage.getItem("role");
-            if (role === 'canteen_staff' || role === 'student' || role === 'admin'||role === 'counselor') {
+            if (role === 'canteen_staff' || role === 'student' || role === 'admin' || role === 'counselor') {
                 document.getElementById("deliveredOrdersSection").style.display = "block";
                 fetchDeliveredOrders(); // Fetch delivered orders when the section is shown
             }
         }
 
-        // Call this function when the page loads
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     showOrdersSection(); // Show current orders
-        //     showReadyOrdersSection(); // Show ready orders
-        //     showDeliveredOrdersSection(); // Show delivered orders
-        // });
-
-        // // Call this function when the page loads
-        // document.addEventListener('DOMContentLoaded', () => {
-        //     showOrdersSection(); // Show current orders
-        //     showReadyOrdersSection(); // Show ready orders
-        // });
-
-        // Initialize on page load
-        // document.addEventListener("DOMContentLoaded", () => {
-        //     checkUserRole();
-        //     fetchMenu();
-        //     if (sessionStorage.getItem("role") !== 'canteen_staff') {
-        //         fetchCartItems(); // Fetch cart items for non-canteen staff
-        //     }
-        //     showOrdersSection(); // Show orders section
-        // });
-
         // Initialize on page load
         document.addEventListener("DOMContentLoaded", () => {
-            checkUserRole();
-            fetchMenu();
-            if (sessionStorage.getItem("role") !== 'canteen_staff') {
-                fetchCartItems(); // Fetch cart items for non-canteen staff
+            const role = sessionStorage.getItem("role");
+            console.log(role);
+            if (role === 'student' || role === 'admin' || role === 'counselor' || role === 'canteen_staff') {
+                checkUserRole();
+                fetchMenu();
+                if (sessionStorage.getItem("role") !== 'canteen_staff') {
+                    fetchCartItems(); // Fetch cart items for non-canteen staff
+                }
+                showOrdersSection(); // Show orders section
+                showReadyOrdersSection(); // Show ready orders
+                showDeliveredOrdersSection(); // Show delivered orders
             }
-            showOrdersSection(); // Show orders section
-            showReadyOrdersSection(); // Show ready orders
-            showDeliveredOrdersSection(); // Show delivered orders
+            else {
+                window.location.href = "auth.html"
+
+            }
+
         });
+        const userId = sessionStorage.getItem("id"); // Assuming you store the user ID in localStorage
+        console.log(userId);
+        if (userId) {
+            socket.emit("join", userId);
+        }
+
+        // Listen for new notifications
+        socket.on("newNotification", (notification) => {
+            showNotification(notification.title, notification.body);
+        });
+
+        // Function to show the notification as a pop-up
+        function showNotification(title, message) {
+            // Create a notification pop-up (if browser supports Notification API)
+            if (Notification.permission === "granted") {
+                new Notification(title, { body: message });
+            }
+            else {
+                // If Notification API is not supported or permission is denied, use an alert
+                alert(`${title}: ${message}`);
+            }
+        }
+
+        // Request permission for browser notifications
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
 
     </script>
 </body>

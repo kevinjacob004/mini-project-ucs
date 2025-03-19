@@ -34,4 +34,37 @@ router.get("/all-users", authenticateToken, async (req, res) => {
 });
 
 
+// Update user profile
+router.put("/update-profile", authenticateToken, async (req, res) => {
+    try {
+        const { id } = req.user; // Assuming you have user ID from the authentication middleware
+        const { fname, lname, email } = req.body;
+
+        // Validate input
+        if (!fname || !lname || !email) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        // Find the user by ID
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Update user details
+        user.first_name = fname;
+        user.last_name = lname;
+        user.email = email;
+        await user.save();
+
+        // Return success response
+        res.status(200).json({ message: "Profile updated successfully", user });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ error: "An error occurred while updating the profile" });
+    }
+});
+
+module.exports = router;
+
   module.exports = router;

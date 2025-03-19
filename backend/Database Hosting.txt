@@ -1,0 +1,186 @@
+Database Credentials
+Get credentials for manual connections to this database.
+
+Host
+batrp3ge5owruyhj8v0f-mysql.services.clever-cloud.com
+
+Database Name
+batrp3ge5owruyhj8v0f
+
+User
+umsrqiltlexnl3lb
+
+Password
+GC2vTJIQ58DYav3fNTPC
+
+🔐
+Port
+3306
+
+
+Connection URI
+mysql://umsrqiltlexnl3lb:GC2vTJIQ58DYav3fNTPC@batrp3ge5owruyhj8v0f-mysql.services.clever-cloud.com:3306/batrp3ge5owruyhj8v0f
+🔐
+
+
+MySQL CLI
+mysql -h batrp3ge5owruyhj8v0f-mysql.services.clever-cloud.com -P 3306 -u umsrqiltlexnl3lb -p batrp3ge5owruyhj8v0f
+
+
+
+
+https://unified-campus-system.onrender.com
+
+
+
+
+mysql> show tables;
++--------------------------------+
+| Tables_in_batrp3ge5owruyhj8v0f |
++--------------------------------+
+| MenuItems                      |
+| Messages                       |
+| OrderItems                     |
+| Orders                         |
+| Threads                        |
+| Users                          |
+| counselling                    |
+| counselling_reports            |
++--------------------------------+
+
+
+
+mysql> desc Users;
++------------+-----------------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                                | Null | Key | Default | Extra          |
++------------+-----------------------------------------------------+------+-----+---------+----------------+
+| id         | bigint                                              | NO   | PRI | NULL    | auto_increment |
+| first_name | varchar(255)                                        | NO   |     | NULL    |                |
+| last_name  | varchar(255)                                        | NO   |     | NULL    |                |
+| username   | varchar(255)                                        | NO   | UNI | NULL    |                |
+| role       | enum('student','counselor','canteen_staff','admin') | NO   |     | NULL    |                |
+| email      | varchar(255)                                        | NO   | UNI | NULL    |                |
+| password   | varchar(255)                                        | NO   |     | NULL    |                |
+| createdAt  | datetime                                            | NO   |     | NULL    |                |
+| updatedAt  | datetime                                            | NO   |     | NULL    |                |
++------------+-----------------------------------------------------+------+-----+---------+----------------+
+9 rows in set (0.24 sec)
+
+
+mysql> desc Threads;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| thread_id  | bigint       | NO   | PRI | NULL    | auto_increment |
+| user_id    | bigint       | NO   | MUL | NULL    |                |
+| title      | varchar(255) | NO   |     | NULL    |                |
+| content    | text         | NO   |     | NULL    |                |
+| created_at | datetime     | YES  |     | NULL    |                |
+| updated_at | datetime     | YES  |     | NULL    |                |
+| createdAt  | datetime     | NO   |     | NULL    |                |
+| updatedAt  | datetime     | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.23 sec)
+
+
+mysql> desc Messages;
++-----------------+----------+------+-----+---------+----------------+
+| Field           | Type     | Null | Key | Default | Extra          |
++-----------------+----------+------+-----+---------+----------------+
+| message_id      | bigint   | NO   | PRI | NULL    | auto_increment |
+| thread_id       | bigint   | NO   | MUL | NULL    |                |
+| user_id         | bigint   | NO   | MUL | NULL    |                |
+| message_content | text     | NO   |     | NULL    |                |
+| created_at      | datetime | YES  |     | NULL    |                |
+| updated_at      | datetime | YES  |     | NULL    |                |
+| createdAt       | datetime | NO   |     | NULL    |                |
+| updatedAt       | datetime | NO   |     | NULL    |                |
++-----------------+----------+------+-----+---------+----------------+
+8 rows in set (0.23 sec)
+
+mysql> desc counselling;
++-------------------+----------+------+-----+---------+----------------+
+| Field             | Type     | Null | Key | Default | Extra          |
++-------------------+----------+------+-----+---------+----------------+
+| session_id        | bigint   | NO   | PRI | NULL    | auto_increment |
+| student_id        | bigint   | YES  | MUL | NULL    |                |
+| counsellor_id     | bigint   | YES  | MUL | NULL    |                |
+| session_date_time | datetime | NO   |     | NULL    |                |
+| remark            | text     | YES  |     | NULL    |                |
+| feedback          | text     | YES  |     | NULL    |                |
+| created_at        | datetime | YES  |     | NULL    |                |
+| updated_at        | datetime | YES  |     | NULL    |                |
++-------------------+----------+------+-----+---------+----------------+
+8 rows in set (0.24 sec)
+
+mysql> desc counselling_reports;
++--------------------------------+--------------+------+-----+---------+-------+
+| Field                          | Type         | Null | Key | Default | Extra |
++--------------------------------+--------------+------+-----+---------+-------+
+| counselling_id                 | bigint       | NO   | PRI | NULL    |       |
+| student_id                     | bigint       | NO   | MUL | NULL    |       |
+| name                           | varchar(255) | NO   |     | NULL    |       |
+| age                            | int          | NO   |     | NULL    |       |
+| department                     | varchar(255) | NO   |     | NULL    |       |
+| date_of_assessment             | datetime     | NO   |     | NULL    |       |
+| referred_by                    | varchar(255) | YES  |     | NULL    |       |
+| background_information         | text         | YES  |     | NULL    |       |
+| collected_from                 | varchar(255) | YES  |     | NULL    |       |
+| reason_for_referral            | text         | YES  |     | NULL    |       |
+| previous_counseling_attendance | tinyint(1)   | NO   |     | 0       |       |
+| presenting_complaints          | text         | YES  |     | NULL    |       |
+| observations_findings          | text         | YES  |     | NULL    |       |
+| recommendations                | text         | YES  |     | NULL    |       |
+| follow_up                      | text         | YES  |     | NULL    |       |
+| counsellor_signature           | varchar(255) | YES  |     | NULL    |       |
+| counsellor_id                  | bigint       | YES  | MUL | NULL    |       |
++--------------------------------+--------------+------+-----+---------+-------+
+17 rows in set (0.21 sec)
+
+
+mysql> desc MenuItems;
++------------------+--------------+------+-----+---------+----------------+
+| Field            | Type         | Null | Key | Default | Extra          |
++------------------+--------------+------+-----+---------+----------------+
+| menu_id          | bigint       | NO   | PRI | NULL    | auto_increment |
+| item_name        | varchar(255) | NO   |     | NULL    |                |
+| item_description | text         | YES  |     | NULL    |                |
+| price            | float        | NO   |     | NULL    |                |
+| quantity         | int          | NO   |     | NULL    |                |
+| available_from   | time         | NO   |     | NULL    |                |
+| available_to     | time         | NO   |     | NULL    |                |
+| createdAt        | datetime     | NO   |     | NULL    |                |
+| updatedAt        | datetime     | NO   |     | NULL    |                |
++------------------+--------------+------+-----+---------+----------------+
+9 rows in set (0.22 sec)
+
+
+
+
+mysql> desc OrderItems;
++----------+--------+------+-----+---------+----------------+
+| Field    | Type   | Null | Key | Default | Extra          |
++----------+--------+------+-----+---------+----------------+
+| id       | bigint | NO   | PRI | NULL    | auto_increment |
+| order_id | bigint | YES  | MUL | NULL    |                |
+| item_id  | bigint | YES  | MUL | NULL    |                |
+| quantity | int    | NO   |     | NULL    |                |
+| price    | float  | NO   |     | NULL    |                |
++----------+--------+------+-----+---------+----------------+
+5 rows in set (0.21 sec)
+
+
+
+mysql> desc Orders;
++------------------+-----------------------------------------------------------+------+-----+---------+----------------+
+| Field            | Type                                                      | Null | Key | Default | Extra          |
++------------------+-----------------------------------------------------------+------+-----+---------+----------------+
+| order_id         | bigint                                                    | NO   | PRI | NULL    | auto_increment |
+| user_id          | bigint                                                    | NO   | MUL | NULL    |                |
+| order_status     | enum('ordering','placed','ready','cancelled','delivered') | YES  |     | placed  |                |
+| total_price      | float                                                     | NO   |     | NULL    |                |
+| reservation_time | datetime                                                  | NO   |     | NULL    |                |
+| createdAt        | datetime                                                  | NO   |     | NULL    |                |
+| updatedAt        | datetime                                                  | NO   |     | NULL    |                |
++------------------+-----------------------------------------------------------+------+-----+---------+----------------+
+7 rows in set (0.22 sec)

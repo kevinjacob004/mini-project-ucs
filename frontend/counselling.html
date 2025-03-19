@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Counselling - Unified Campus System</title>
-    <link rel="shortcut icon" href="1.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./static/1.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <!-- Add Socket.IO client library -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
@@ -249,7 +251,7 @@
 
         function checkUserRole() {
             const role = sessionStorage.getItem("role");
-
+            console.log(role);
             if (role === "student") {
                 document.getElementById("studentView").style.display = "block";
                 fetchStudentBookedSlots(); // Fetch student bookings
@@ -261,6 +263,12 @@
             } else if (role === "admin") {
                 document.getElementById("adminView").style.display = "block";
                 fetchAllBookedSlots(); // Fetch all booked slots for admin
+            }
+            else if (role === 'canteen_staff') {
+                console.log("Not Available");
+            }
+            else {
+                window.location.href = "auth.html"
             }
         }
 
@@ -714,11 +722,6 @@
             }
         }
 
-
-
-
-
-
         // Handle logout
         document.querySelector(".logout").addEventListener("click", () => {
             // Clear sessionStorage
@@ -727,10 +730,40 @@
             sessionStorage.removeItem("fname");
             sessionStorage.removeItem("lname");
             sessionStorage.removeItem("id");
+            sessionStorage.removeItem("role");
+            sessionStorage.removeItem("email");
 
             // Redirect to the login page
             window.location.href = "auth.html";
         });
+
+        const userId = sessionStorage.getItem("id"); // Assuming you store the user ID in localStorage
+        console.log(userId);
+        if (userId) {
+            socket.emit("join", userId);
+        }
+
+        // Listen for new notifications
+        socket.on("newNotification", (notification) => {
+            showNotification(notification.title, notification.body);
+        });
+
+        // Function to show the notification as a pop-up
+        function showNotification(title, message) {
+            // Create a notification pop-up (if browser supports Notification API)
+            if (Notification.permission === "granted") {
+                new Notification(title, { body: message });
+            }
+            else {
+                // If Notification API is not supported or permission is denied, use an alert
+                alert(`${title}: ${message}`);
+            }
+        }
+
+        // Request permission for browser notifications
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
 
 
     </script>
