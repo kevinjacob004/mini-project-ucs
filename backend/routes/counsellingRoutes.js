@@ -64,7 +64,7 @@ router.post("/book-slot", async (req, res) => {
     try {
         const { student_id, counsellor_id, session_date_time } = req.body;
         // const booking = await Counselling.create({ student_id, counsellor_id, session_date_time });
-        
+
         const formattedDateTime = new Date(session_date_time).toISOString().slice(0, 19).replace("T", " ");
 
         if (!counsellor_id) return res.status(400).json({ error: "No counsellor selected" });
@@ -80,6 +80,9 @@ router.post("/book-slot", async (req, res) => {
 
         res.json({ message: "Session booked successfully!", booking });
     } catch (error) {
+        if (error.name === "SequelizeUniqueConstraintError") {
+            return res.status(400).json({ error: "This counsellor is unavailable at this time" });
+        }
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
